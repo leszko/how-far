@@ -5,9 +5,15 @@ import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.widget.TextView;
 
+import java.text.DecimalFormat;
+
 public class MainActivity extends FragmentActivity {
 
     private static final String TAG = "MainActivity";
+
+    private HomeDistanceCalculator distanceCalculator = new HomeDistanceCalculator();
+
+    private DecimalFormat distanceFormat = new DecimalFormat("#.#");
 
     private TextView mainText;
 
@@ -29,6 +35,9 @@ public class MainActivity extends FragmentActivity {
 
     public void updateLocation(double latitude, double longitude) {
         Log.i(TAG, "Update Location: latitude = " + latitude + ", longitude = " + longitude);
-        mainText.setText("Location: " + latitude + ", " + longitude);
+
+        double distance = distanceCalculator.distanceInKm(latitude, longitude);
+        String stringDistance = distanceFormat.format(distance);
+        mainText.setText(stringDistance + " km");
     }
 }
