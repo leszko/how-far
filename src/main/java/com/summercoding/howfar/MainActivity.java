@@ -16,6 +16,7 @@ public class MainActivity extends FragmentActivity {
     private DecimalFormat distanceFormat = new DecimalFormat("#.#");
 
     private TextView mainText;
+    private MainActivityLocationManager locationManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,8 +30,15 @@ public class MainActivity extends FragmentActivity {
     protected void onStart() {
         super.onStart();
 
-        MainActivityLocationManager locationManager = new MainActivityLocationManager(this);
+        locationManager = new MainActivityLocationManager(this);
         locationManager.start();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+        locationManager.stop();
     }
 
     public void updateLocation(double latitude, double longitude) {
