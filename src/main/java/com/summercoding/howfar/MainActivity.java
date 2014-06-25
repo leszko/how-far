@@ -46,6 +46,10 @@ public class MainActivity extends FragmentActivity {
 
         double distance = distanceCalculator.distanceInKm(latitude, longitude);
         String stringDistance = distanceFormat.format(distance);
-        mainText.setText(stringDistance + " km");
+        if (stringDistance.equals("0")) {
+            mainText.setText("you're home");
+        } else {
+            mainText.setText(stringDistance + " km");
+        }
     }
 }
