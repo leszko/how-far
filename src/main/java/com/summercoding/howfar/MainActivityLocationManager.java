@@ -5,12 +5,16 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.util.Log;
 
 public class MainActivityLocationManager implements LocationListener {
 
     private static final String PROVIDER = LocationManager.GPS_PROVIDER;
+    private static final String NETWORK_PROVIDER = LocationManager.NETWORK_PROVIDER;
+
     private static final long MIN_TIME = 5000L;
     private static final float MIN_DISTANCE = 50;
+    private static final double MIN_ACCURACY = 100;
 
     private final MainActivity mainActivity;
     private LocationManager locationManager;
@@ -21,7 +25,12 @@ public class MainActivityLocationManager implements LocationListener {
 
     public void start() {
         locationManager = (LocationManager) mainActivity.getSystemService(Context.LOCATION_SERVICE);
-        locationManager.requestLocationUpdates(PROVIDER, MIN_TIME, MIN_DISTANCE, this);
+        if (locationManager.getAllProviders().contains(PROVIDER)) {
+            locationManager.requestLocationUpdates(PROVIDER, MIN_TIME, MIN_DISTANCE, this);
+        }
+        if (locationManager.getAllProviders().contains(NETWORK_PROVIDER)) {
+            locationManager.requestLocationUpdates(NETWORK_PROVIDER, MIN_TIME, MIN_DISTANCE, this);
+        }
     }
 
     public void stop() {
@@ -30,7 +39,9 @@ public class MainActivityLocationManager implements LocationListener {
 
     @Override
     public void onLocationChanged(Location location) {
-        mainActivity.updateLocation(location.getLatitude(), location.getLongitude());
+        if (location.getAccuracy() < MIN_ACCURACY) {
+            mainActivity.updateLocation(location.getLatitude(), location.getLongitude());
+        }
     }
 
     @Override
