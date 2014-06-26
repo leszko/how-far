@@ -13,7 +13,7 @@ public class MainActivityLocationManager implements LocationListener {
     private static final String NETWORK_PROVIDER = LocationManager.NETWORK_PROVIDER;
 
     private static final long MIN_TIME = 5000L;
-    private static final float MIN_DISTANCE = 50;
+    private static final float MIN_DISTANCE = 100;
     private static final double MIN_ACCURACY = 100;
 
     private final MainActivity mainActivity;
@@ -51,11 +51,16 @@ public class MainActivityLocationManager implements LocationListener {
 
     @Override
     public void onProviderEnabled(String provider) {
-        // do nothing
+        refreshLocationUpdates();
     }
 
     @Override
     public void onProviderDisabled(String provider) {
-        // do nothing
+        refreshLocationUpdates();
+    }
+
+    private void refreshLocationUpdates() {
+        stop();
+        start();
     }
 }
