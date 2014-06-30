@@ -20,17 +20,20 @@ public class MainTextSetter {
     }
 
     public void updateLocation(double latitude, double longitude) {
-        Log.i(TAG, "Update Location: latitude = " + latitude + ", longitude = " + longitude);
+        Log.d(TAG, String.format("Update Location: %f, %f", latitude, longitude));
 
-        double distance = distanceCalculator.distanceInKm(latitude, longitude);
-        String stringDistance = distanceFormat.format(distance);
-        if (stringDistance.equals("0")) {
-            mainText.setText("you're home");
+        if (!homePersister.isSet()) {
+            mainText.setText("Where is your home?");
         } else {
-            mainText.setText(stringDistance + " km");
+            distanceCalculator.setHomeLatitude(homePersister.getLatitude());
+            distanceCalculator.setHomeLongitude(homePersister.getLongitude());
+            double distance = distanceCalculator.distanceInKm(latitude, longitude);
+            String stringDistance = distanceFormat.format(distance);
+            if (stringDistance.equals("0")) {
+                mainText.setText("you're home");
+            } else {
+                mainText.setText(stringDistance + " km");
+            }
         }
-        double homeLatitude = homePersister.getLatitude();
-        double homeLongitude = homePersister.getLongitude();
-        mainText.setText(String.format("Home location: %f, %f", homeLatitude, homeLongitude));
     }
 }

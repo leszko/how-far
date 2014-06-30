@@ -5,19 +5,28 @@ import android.location.Location;
 public class HomeDistanceCalculator {
     private static final double KILO = 1000;
 
-    private static final double HOME_LATITUDE = 50.063987;
-    private static final double HOME_LONGITUDE = 19.926916;
-
     private static final double MIN_DIFF = 0.01;
+
+
+    private double homeLatitude = 0.0;
+    private double homeLongitude = 0.0;
 
     private double lastLatitude = 0.0;
     private double lastLongitude = 0.0;
     private double lastResult = 0.0;
 
+    public void setHomeLatitude(double homeLatitude) {
+        this.homeLatitude = homeLatitude;
+    }
+
+    public void setHomeLongitude(double homeLongitude) {
+        this.homeLongitude = homeLongitude;
+    }
+    
     public double distanceInKm(double latitude, double longitude) {
         if (isDifferenceBigEnough(latitude, longitude)) {
             float[] result = new float[1];
-            Location.distanceBetween(HOME_LATITUDE, HOME_LONGITUDE, latitude, longitude, result);
+            Location.distanceBetween(homeLatitude, homeLongitude, latitude, longitude, result);
             lastResult = result[0] / KILO;
         }
         return lastResult;
