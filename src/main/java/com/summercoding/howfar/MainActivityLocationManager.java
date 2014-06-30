@@ -19,6 +19,9 @@ public class MainActivityLocationManager implements LocationListener {
     private final MainActivity mainActivity;
     private LocationManager locationManager;
 
+    private double lastLatitude = 0.0;
+    private double lastLongitude = 0.0;
+
     public MainActivityLocationManager(MainActivity mainActivity) {
         this.mainActivity = mainActivity;
     }
@@ -37,10 +40,20 @@ public class MainActivityLocationManager implements LocationListener {
         locationManager.removeUpdates(this);
     }
 
+    public double getLastLatitude() {
+        return lastLatitude;
+    }
+
+    public double getLastLongitude() {
+        return lastLongitude;
+    }
+
     @Override
     public void onLocationChanged(Location location) {
         if (location.getAccuracy() < MIN_ACCURACY) {
-            mainActivity.updateLocation(location.getLatitude(), location.getLongitude());
+            lastLatitude = location.getLatitude();
+            lastLongitude = location.getLongitude();
+            mainActivity.updateLocation(lastLatitude, lastLongitude);
         }
     }
 

@@ -3,7 +3,7 @@
 
     <string name="app_name" >How Far
     </string>
-    <string name="action_settings" >Settings
+    <string name="action_set_home" >Set home
     </string>
 
 </resources>
