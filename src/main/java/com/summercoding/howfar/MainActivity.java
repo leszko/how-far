@@ -9,9 +9,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class MainActivity extends FragmentActivity {
-
-    private static final String TAG = MainActivity.class.getSimpleName();
     private static final String PREFS_NAME = "HowFarPrefs";
+
+    public static final String HOME_SET_MESSAGE = "Home set";
 
     private LocationManager locationManager;
     private HomePersister homePersister;
@@ -61,7 +61,7 @@ public class MainActivity extends FragmentActivity {
 
     private void setHome() {
         homePersister.store(locationManager.getLastLatitude(), locationManager.getLastLongitude());
-        Toast.makeText(getApplicationContext(), "Home set", Toast.LENGTH_LONG).show();
+        Toast.makeText(getApplicationContext(), HOME_SET_MESSAGE, Toast.LENGTH_LONG).show();
     }
 
     public void updateLocation(double latitude, double longitude) {

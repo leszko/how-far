@@ -1,8 +1,6 @@
 package com.summercoding.howfar;
 
 import android.location.Location;
-import android.location.LocationManager;
-import android.util.Log;
 
 public class HomeDistanceCalculator {
     private static final double KILO = 1000;
