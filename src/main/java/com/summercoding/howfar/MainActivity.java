@@ -24,7 +24,7 @@ public class MainActivity extends FragmentActivity {
 
         TextView mainText = (TextView) findViewById(R.id.textView);
         homePersister = new HomePersister(getSharedPreferences(PREFS_NAME, MODE_PRIVATE));
-        mainTextSetter = new MainTextSetter(mainText, locationManager, homePersister);
+        mainTextSetter = new MainTextSetter(mainText, homePersister);
     }
 
     @Override

@@ -7,17 +7,15 @@ import java.text.DecimalFormat;
 
 public class MainTextSetter {
     private static final String TAG = MainTextSetter.class.getSimpleName();
-    
+
     private final TextView mainText;
-    private final LocationManager locationManager;
     private final HomePersister homePersister;
 
     private final HomeDistanceCalculator distanceCalculator = new HomeDistanceCalculator();
     private final DecimalFormat distanceFormat = new DecimalFormat("#.#");
 
-    public MainTextSetter(TextView mainText, LocationManager locationManager, HomePersister homePersister) {
+    public MainTextSetter(TextView mainText, HomePersister homePersister) {
         this.mainText = mainText;
-        this.locationManager = locationManager;
         this.homePersister = homePersister;
     }
 
