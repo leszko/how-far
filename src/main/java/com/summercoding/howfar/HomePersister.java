@@ -3,9 +3,9 @@ package com.summercoding.howfar;
 import android.content.SharedPreferences;
 import android.util.Log;
 
-public class HomeLocationPersister {
+public class HomePersister {
 
-    private final static String TAG = HomeLocationPersister.class.getSimpleName();
+    private final static String TAG = HomePersister.class.getSimpleName();
 
     private final static String HOME_LATITUDE = "homeLatitude";
     private final static String HOME_LONGITUDE = "homeLongitude";
@@ -15,7 +15,7 @@ public class HomeLocationPersister {
     private double latitude = 0.0;
     private double longitude = 0.0;
 
-    public HomeLocationPersister(SharedPreferences sharedPreferences) {
+    public HomePersister(SharedPreferences sharedPreferences) {
         this.sharedPreferences = sharedPreferences;
 
         initFields();

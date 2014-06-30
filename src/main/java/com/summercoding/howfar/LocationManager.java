@@ -3,31 +3,29 @@ package com.summercoding.howfar;
 import android.content.Context;
 import android.location.Location;
 import android.location.LocationListener;
-import android.location.LocationManager;
 import android.os.Bundle;
-import android.util.Log;
 
-public class MainActivityLocationManager implements LocationListener {
+public class LocationManager implements LocationListener {
 
-    private static final String PROVIDER = LocationManager.GPS_PROVIDER;
-    private static final String NETWORK_PROVIDER = LocationManager.NETWORK_PROVIDER;
+    private static final String PROVIDER = android.location.LocationManager.GPS_PROVIDER;
+    private static final String NETWORK_PROVIDER = android.location.LocationManager.NETWORK_PROVIDER;
 
     private static final long MIN_TIME = 5000L;
     private static final float MIN_DISTANCE = 100;
     private static final double MIN_ACCURACY = 100;
 
     private final MainActivity mainActivity;
-    private LocationManager locationManager;
+    private android.location.LocationManager locationManager;
 
     private double lastLatitude = 0.0;
     private double lastLongitude = 0.0;
 
-    public MainActivityLocationManager(MainActivity mainActivity) {
+    public LocationManager(MainActivity mainActivity) {
         this.mainActivity = mainActivity;
     }
 
     public void start() {
-        locationManager = (LocationManager) mainActivity.getSystemService(Context.LOCATION_SERVICE);
+        locationManager = (android.location.LocationManager) mainActivity.getSystemService(Context.LOCATION_SERVICE);
         if (locationManager.getAllProviders().contains(PROVIDER)) {
             locationManager.requestLocationUpdates(PROVIDER, MIN_TIME, MIN_DISTANCE, this);
         }
