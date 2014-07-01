@@ -24,11 +24,15 @@ public class HomeDistanceCalculator {
         if (isDifferenceBigEnough(latitude, longitude)) {
             lastLatitude = latitude;
             lastLongitude = longitude;
-            float[] result = new float[1];
-            Location.distanceBetween(homeLatitude, homeLongitude, latitude, longitude, result);
-            lastResult = result[0] / KILO;
+            lastResult = calculateDistanceInKm(latitude, longitude);
         }
         return lastResult;
+    }
+
+    private double calculateDistanceInKm(double latitude, double longitude) {
+        float[] result = new float[1];
+        Location.distanceBetween(homeLatitude, homeLongitude, latitude, longitude, result);
+        return result[0] / KILO;
     }
 
     private boolean isDifferenceBigEnough(double latitude, double longitude) {

@@ -42,7 +42,7 @@ public class HomePersister {
         double latitude = Double.longBitsToDouble(sharedPreferences.getLong(HOME_LATITUDE, 0L));
         double longitude = Double.longBitsToDouble(sharedPreferences.getLong(HOME_LONGITUDE, 0L));
 
-        if (latitude != 0.0 || longitude != 0.0) {
+        if (isSet(latitude, longitude)) {
             Location location = new Location(PROVIDER);
             location.setLatitude(latitude);
             location.setLongitude(longitude);
@@ -51,5 +51,9 @@ public class HomePersister {
         }
 
         return null;
+    }
+
+    private static boolean isSet(double latitude, double longitude) {
+        return latitude != 0.0 || longitude != 0.0;
     }
 }
