@@ -5,7 +5,7 @@ import android.location.Location;
 public class HomeDistanceCalculator {
     private static final double KILO = 1000;
 
-    private static final double MIN_DIFF = 0.01;
+    private static final double MIN_DIFF = 0.001;
 
     private double homeLatitude = 0.0;
     private double homeLongitude = 0.0;
