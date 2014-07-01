@@ -45,6 +45,8 @@ public class MainTextSetter implements LocationListener {
 
     public void updateHome(Location location) {
         if (location != null) {
+            Log.d(TAG, String.format("Update home location: %f, %f", location.getLatitude(), location.getLongitude()));
+            
             homeSet = true;
             distanceCalculator.setHome(location);
         }

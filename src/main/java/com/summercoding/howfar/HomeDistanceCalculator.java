@@ -18,6 +18,8 @@ public class HomeDistanceCalculator {
         Preconditions.checkNotNull(location);
         homeLatitude = location.getLatitude();
         homeLongitude = location.getLongitude();
+        lastLatitude = 0.0;
+        lastLongitude = 0.0;
     }
 
     public double distanceInKm(double latitude, double longitude) {
