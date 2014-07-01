@@ -65,10 +65,10 @@ public class MainActivity extends FragmentActivity {
     }
 
     private void setHome() {
-        Location currentLocation = locationReceiver.getLastLocation();
+        Location currentLocation = locationReceiver.getCurrentLocation();
         if (currentLocation != null) {
-            mainTextSetter.updateHome(locationReceiver.getLastLocation());
-            homePersister.store(locationReceiver.getLastLocation());
+            mainTextSetter.updateHome(locationReceiver.getCurrentLocation());
+            homePersister.store(locationReceiver.getCurrentLocation());
             Toast.makeText(getApplicationContext(), HOME_SET_MESSAGE, Toast.LENGTH_LONG).show();
         } else {
             Toast.makeText(getApplicationContext(), HOME_NOT_SET_MESSAGE, Toast.LENGTH_LONG).show();
