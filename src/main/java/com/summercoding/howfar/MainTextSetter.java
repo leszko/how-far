@@ -43,11 +43,10 @@ public class MainTextSetter implements LocationListener {
         }
     }
 
-    public void updateHome(double latitude, double longitude) {
-        if (latitude != 0.0 && longitude != 0.0) {
+    public void updateHome(Location location) {
+        if (location != null) {
             homeSet = true;
+            distanceCalculator.setHome(location);
         }
-        distanceCalculator.setHomeLatitude(latitude);
-        distanceCalculator.setHomeLongitude(longitude);
     }
 }

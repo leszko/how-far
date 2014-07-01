@@ -7,7 +7,6 @@ public class HomeDistanceCalculator {
 
     private static final double MIN_DIFF = 0.01;
 
-
     private double homeLatitude = 0.0;
     private double homeLongitude = 0.0;
 
@@ -15,16 +14,16 @@ public class HomeDistanceCalculator {
     private double lastLongitude = 0.0;
     private double lastResult = 0.0;
 
-    public void setHomeLatitude(double homeLatitude) {
-        this.homeLatitude = homeLatitude;
+    public void setHome(Location location) {
+        Preconditions.checkNotNull(location);
+        homeLatitude = location.getLatitude();
+        homeLongitude = location.getLongitude();
     }
 
-    public void setHomeLongitude(double homeLongitude) {
-        this.homeLongitude = homeLongitude;
-    }
-    
     public double distanceInKm(double latitude, double longitude) {
         if (isDifferenceBigEnough(latitude, longitude)) {
+            lastLatitude = latitude;
+            lastLongitude = longitude;
             float[] result = new float[1];
             Location.distanceBetween(homeLatitude, homeLongitude, latitude, longitude, result);
             lastResult = result[0] / KILO;

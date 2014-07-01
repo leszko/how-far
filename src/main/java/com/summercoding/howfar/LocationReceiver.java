@@ -18,8 +18,7 @@ public class LocationReceiver implements android.location.LocationListener {
     private final LocationListener locationListener;
     private LocationManager locationManager;
 
-    private double lastLatitude = 0.0;
-    private double lastLongitude = 0.0;
+    private Location lastLocation = null;
 
     public LocationReceiver(LocationListener locationListener, LocationManager locationManager) {
         this.locationListener = locationListener;
@@ -39,19 +38,14 @@ public class LocationReceiver implements android.location.LocationListener {
         locationManager.removeUpdates(this);
     }
 
-    public double getLastLatitude() {
-        return lastLatitude;
-    }
-
-    public double getLastLongitude() {
-        return lastLongitude;
+    public Location getLastLocation() {
+        return lastLocation;
     }
 
     @Override
     public void onLocationChanged(Location location) {
         if (location.getAccuracy() < MIN_ACCURACY) {
-            lastLatitude = location.getLatitude();
-            lastLongitude = location.getLongitude();
+            lastLocation = location;
             locationListener.onLocationChanged(location);
         }
     }
