@@ -1,5 +1,7 @@
 package com.summercoding.howfar;
 
+import android.content.Context;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.view.Menu;
@@ -13,7 +15,7 @@ public class MainActivity extends FragmentActivity {
 
     public static final String HOME_SET_MESSAGE = "Home set";
 
-    private LocationManager locationManager;
+    private LocationReceiver locationReceiver;
     private HomePersister homePersister;
     private MainTextSetter mainTextSetter;
 
@@ -24,22 +26,23 @@ public class MainActivity extends FragmentActivity {
 
         TextView mainText = (TextView) findViewById(R.id.textView);
         homePersister = new HomePersister(getSharedPreferences(PREFS_NAME, MODE_PRIVATE));
-        mainTextSetter = new MainTextSetter(mainText, homePersister);
+        mainTextSetter = new MainTextSetter(mainText);
+        mainTextSetter.updateHome(homePersister.getLatitude(), homePersister.getLongitude());
+        locationReceiver = new LocationReceiver(mainTextSetter, (LocationManager) getSystemService(Context.LOCATION_SERVICE));
     }
 
     @Override
     protected void onStart() {
         super.onStart();
 
-        locationManager = new LocationManager(this);
-        locationManager.start();
+        locationReceiver.start();
     }
 
     @Override
     protected void onStop() {
         super.onStop();
 
-        locationManager.stop();
+        locationReceiver.stop();
     }
 
     @Override
@@ -60,11 +63,8 @@ public class MainActivity extends FragmentActivity {
     }
 
     private void setHome() {
-        homePersister.store(locationManager.getLastLatitude(), locationManager.getLastLongitude());
+        mainTextSetter.updateHome(locationReceiver.getLastLatitude(), locationReceiver.getLastLongitude());
+        homePersister.store(locationReceiver.getLastLatitude(), locationReceiver.getLastLongitude());
         Toast.makeText(getApplicationContext(), HOME_SET_MESSAGE, Toast.LENGTH_LONG).show();
-    }
-
-    public void updateLocation(double latitude, double longitude) {
-        mainTextSetter.updateLocation(latitude, longitude);
     }
 }

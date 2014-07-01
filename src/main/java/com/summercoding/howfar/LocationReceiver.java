@@ -1,31 +1,32 @@
 package com.summercoding.howfar;
 
-import android.content.Context;
 import android.location.Location;
-import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
 
-public class LocationManager implements LocationListener {
+import com.google.android.gms.location.LocationListener;
 
-    private static final String PROVIDER = android.location.LocationManager.GPS_PROVIDER;
-    private static final String NETWORK_PROVIDER = android.location.LocationManager.NETWORK_PROVIDER;
+public class LocationReceiver implements android.location.LocationListener {
+
+    private static final String PROVIDER = LocationManager.GPS_PROVIDER;
+    private static final String NETWORK_PROVIDER = LocationManager.NETWORK_PROVIDER;
 
     private static final long MIN_TIME = 5000L;
     private static final float MIN_DISTANCE = 100;
     private static final double MIN_ACCURACY = 100;
 
-    private final MainActivity mainActivity;
-    private android.location.LocationManager locationManager;
+    private final LocationListener locationListener;
+    private LocationManager locationManager;
 
     private double lastLatitude = 0.0;
     private double lastLongitude = 0.0;
 
-    public LocationManager(MainActivity mainActivity) {
-        this.mainActivity = mainActivity;
+    public LocationReceiver(LocationListener locationListener, LocationManager locationManager) {
+        this.locationListener = locationListener;
+        this.locationManager = locationManager;
     }
 
     public void start() {
-        locationManager = (android.location.LocationManager) mainActivity.getSystemService(Context.LOCATION_SERVICE);
         if (locationManager.getAllProviders().contains(PROVIDER)) {
             locationManager.requestLocationUpdates(PROVIDER, MIN_TIME, MIN_DISTANCE, this);
         }
@@ -51,7 +52,7 @@ public class LocationManager implements LocationListener {
         if (location.getAccuracy() < MIN_ACCURACY) {
             lastLatitude = location.getLatitude();
             lastLongitude = location.getLongitude();
-            mainActivity.updateLocation(lastLatitude, lastLongitude);
+            locationListener.onLocationChanged(location);
         }
     }
 

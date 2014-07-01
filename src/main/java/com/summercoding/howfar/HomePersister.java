@@ -21,10 +21,6 @@ public class HomePersister {
         initFields();
     }
 
-    public boolean isSet() {
-        return latitude != 0.0 || longitude != 0.0;
-    }
-
     public void store(double latitude, double longitude) {
         Log.d(TAG, String.format("Store home location: %f, %f", latitude, longitude));
 

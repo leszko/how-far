@@ -1,32 +1,38 @@
 package com.summercoding.howfar;
 
+import android.location.Location;
 import android.util.Log;
 import android.widget.TextView;
 
+import com.google.android.gms.location.LocationListener;
+
 import java.text.DecimalFormat;
 
-public class MainTextSetter {
+public class MainTextSetter implements LocationListener {
     private static final String TAG = MainTextSetter.class.getSimpleName();
 
     private final TextView mainText;
-    private final HomePersister homePersister;
 
     private final HomeDistanceCalculator distanceCalculator = new HomeDistanceCalculator();
     private final DecimalFormat distanceFormat = new DecimalFormat("#.#");
 
-    public MainTextSetter(TextView mainText, HomePersister homePersister) {
+    private boolean homeSet = false;
+
+    public MainTextSetter(TextView mainText) {
         this.mainText = mainText;
-        this.homePersister = homePersister;
     }
 
-    public void updateLocation(double latitude, double longitude) {
+    @Override
+    public void onLocationChanged(Location location) {
+        updateLocation(location.getLatitude(), location.getLongitude());
+    }
+
+    private void updateLocation(double latitude, double longitude) {
         Log.d(TAG, String.format("Update Location: %f, %f", latitude, longitude));
 
-        if (!homePersister.isSet()) {
+        if (!homeSet) {
             mainText.setText("Where is your home?");
         } else {
-            distanceCalculator.setHomeLatitude(homePersister.getLatitude());
-            distanceCalculator.setHomeLongitude(homePersister.getLongitude());
             double distance = distanceCalculator.distanceInKm(latitude, longitude);
             String stringDistance = distanceFormat.format(distance);
             if (stringDistance.equals("0")) {
@@ -35,5 +41,13 @@ public class MainTextSetter {
                 mainText.setText(stringDistance + " km");
             }
         }
+    }
+
+    public void updateHome(double latitude, double longitude) {
+        if (latitude != 0.0 && longitude != 0.0) {
+            homeSet = true;
+        }
+        distanceCalculator.setHomeLatitude(latitude);
+        distanceCalculator.setHomeLongitude(longitude);
     }
 }
