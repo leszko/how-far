@@ -15,10 +15,13 @@ public class LocationReceiver implements android.location.LocationListener {
     private static final float MIN_DISTANCE = 100;
     private static final double MIN_ACCURACY = 100;
 
+    private static final long CURRENT_LOCATION_TIMEOUT = 5L * 60L * 1000L; // 5 min
+
     private final LocationListener locationListener;
     private LocationManager locationManager;
 
-    private Location lastLocation = null;
+    private Location currentLocation = null;
+    private long currentLocationTimestamp = 0L;
 
     public LocationReceiver(LocationListener locationListener, LocationManager locationManager) {
         this.locationListener = locationListener;
@@ -38,14 +41,18 @@ public class LocationReceiver implements android.location.LocationListener {
         locationManager.removeUpdates(this);
     }
 
-    public Location getLastLocation() {
-        return lastLocation;
+    public Location getCurrentLocation() {
+        if (System.currentTimeMillis() - currentLocationTimestamp > CURRENT_LOCATION_TIMEOUT) {
+            return null;
+        }
+        return currentLocation;
     }
 
     @Override
     public void onLocationChanged(Location location) {
+        currentLocation = location;
+        currentLocationTimestamp = System.currentTimeMillis();
         if (location.getAccuracy() < MIN_ACCURACY) {
-            lastLocation = location;
             locationListener.onLocationChanged(location);
         }
     }
