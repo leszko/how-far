@@ -18,6 +18,7 @@ public class MainActivity extends FragmentActivity {
     public static final String HOME_NOT_SET_MESSAGE = "Current location not found";
 
     private LocationReceiver locationReceiver;
+    private CurrentLocationProvider currentLocationProvider;
     private HomeLocationPersister homeLocationPersister;
     private MainTextSetter mainTextSetter;
 
@@ -30,7 +31,10 @@ public class MainActivity extends FragmentActivity {
         homeLocationPersister = new HomeLocationPersister(getSharedPreferences(PREFS_NAME, MODE_PRIVATE));
         mainTextSetter = new MainTextSetter(mainText);
         mainTextSetter.updateHome(homeLocationPersister.loadLocation());
-        locationReceiver = new LocationReceiver(mainTextSetter, (LocationManager) getSystemService(Context.LOCATION_SERVICE));
+        currentLocationProvider = new CurrentLocationProvider();
+        locationReceiver = new LocationReceiver((LocationManager) getSystemService(Context.LOCATION_SERVICE));
+        locationReceiver.addLocationListener(mainTextSetter);
+        locationReceiver.addLocationListener(currentLocationProvider);
     }
 
     @Override
@@ -65,7 +69,7 @@ public class MainActivity extends FragmentActivity {
     }
 
     private void setHome() {
-        Location currentLocation = locationReceiver.getCurrentLocation();
+        Location currentLocation = currentLocationProvider.getCurrentLocation();
         if (currentLocation != null) {
             homeLocationPersister.store(currentLocation);
             mainTextSetter.updateHome(currentLocation);

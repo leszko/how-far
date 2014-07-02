@@ -6,6 +6,8 @@ import android.os.Bundle;
 
 import com.google.android.gms.location.LocationListener;
 
+import java.util.LinkedList;
+
 public class LocationReceiver implements android.location.LocationListener {
 
     private static final String PROVIDER = LocationManager.GPS_PROVIDER;
@@ -15,17 +17,16 @@ public class LocationReceiver implements android.location.LocationListener {
     private static final float MIN_DISTANCE = 50;
     private static final double MIN_ACCURACY = 50;
 
-    private static final long CURRENT_LOCATION_TIMEOUT = 5L * 60L * 1000L; // 5 min
+    private final LocationManager locationManager;
+    private final LinkedList<LocationListener> locationListeners;
 
-    private final LocationListener locationListener;
-    private LocationManager locationManager;
-
-    private Location currentLocation = null;
-    private long currentLocationTimestamp = 0L;
-
-    public LocationReceiver(LocationListener locationListener, LocationManager locationManager) {
-        this.locationListener = locationListener;
+    public LocationReceiver(LocationManager locationManager) {
         this.locationManager = locationManager;
+        this.locationListeners = new LinkedList<LocationListener>();
+    }
+
+    public void addLocationListener(LocationListener locationListener) {
+        locationListeners.add(locationListener);
     }
 
     public void start() {
@@ -41,18 +42,15 @@ public class LocationReceiver implements android.location.LocationListener {
         locationManager.removeUpdates(this);
     }
 
-    public Location getCurrentLocation() {
-        if (System.currentTimeMillis() - currentLocationTimestamp > CURRENT_LOCATION_TIMEOUT) {
-            return null;
-        }
-        return currentLocation;
-    }
-
     @Override
     public void onLocationChanged(Location location) {
-        currentLocation = location;
-        currentLocationTimestamp = System.currentTimeMillis();
         if (location.getAccuracy() < MIN_ACCURACY) {
+            notifyLocationListeners(location);
+        }
+    }
+
+    private void notifyLocationListeners(Location location) {
+        for (LocationListener locationListener : locationListeners) {
             locationListener.onLocationChanged(location);
         }
     }
