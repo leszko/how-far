@@ -13,7 +13,7 @@ public class LocationReceiver implements android.location.LocationListener {
     private static final String PROVIDER = LocationManager.GPS_PROVIDER;
     private static final String NETWORK_PROVIDER = LocationManager.NETWORK_PROVIDER;
 
-    private static final long MIN_TIME = 5000L;
+    private static final long MIN_TIME = 1000L;
     private static final float MIN_DISTANCE = 50;
     private static final double MIN_ACCURACY = 50;
 
