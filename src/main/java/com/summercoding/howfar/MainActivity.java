@@ -8,6 +8,8 @@ import android.support.v4.app.FragmentActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,11 +30,17 @@ public class MainActivity extends FragmentActivity {
         setContentView(R.layout.activity_main);
 
         init();
+        updateSetHomeButtonVisibility();
+    }
+
+    private void updateSetHomeButtonVisibility() {
+        Button setHomeButton = (Button) findViewById(R.id.setHomeButton);
+        setHomeButton.setVisibility(Button.VISIBLE);
     }
 
     private void init() {
         homeLocationPersister = new HomeLocationPersister(getSharedPreferences(PREFS_NAME, MODE_PRIVATE));
-        mainTextSetter = new MainTextSetter((TextView) findViewById(R.id.textView));
+        mainTextSetter = new MainTextSetter((TextView) findViewById(R.id.mainTextView));
         currentLocationProvider = new CurrentLocationProvider();
         locationReceiver = new LocationReceiver((LocationManager) getSystemService(Context.LOCATION_SERVICE));
 
@@ -69,6 +77,10 @@ public class MainActivity extends FragmentActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    public void onSetHomeButtonClicked(View view) {
+        setHome();
     }
 
     private void setHome() {

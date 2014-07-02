@@ -9,12 +9,23 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:id="@+id/textView"
+        android:id="@+id/mainTextView"
         android:gravity="center"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
         android:textColor="@color/white"
         android:textIsSelectable="false"
         android:textSize="@dimen/main_text" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Set Home"
+        android:id="@+id/setHomeButton"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="60dp"
+        android:visibility="invisible"
+        android:onClick="onSetHomeButtonClicked" />
 
 </RelativeLayout>
