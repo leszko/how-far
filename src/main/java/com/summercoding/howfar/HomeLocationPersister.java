@@ -4,9 +4,9 @@ import android.content.SharedPreferences;
 import android.location.Location;
 import android.util.Log;
 
-public class HomePersister {
+public class HomeLocationPersister {
 
-    private final static String TAG = HomePersister.class.getSimpleName();
+    private final static String TAG = HomeLocationPersister.class.getSimpleName();
 
     private final static String HOME_LATITUDE = "homeLatitude";
     private final static String HOME_LONGITUDE = "homeLongitude";
@@ -15,9 +15,8 @@ public class HomePersister {
 
     private final SharedPreferences sharedPreferences;
 
-    public HomePersister(SharedPreferences sharedPreferences) {
+    public HomeLocationPersister(SharedPreferences sharedPreferences) {
         this.sharedPreferences = sharedPreferences;
-
     }
 
     public void store(Location location) {
@@ -25,7 +24,6 @@ public class HomePersister {
 
         double latitude = location.getLatitude();
         double longitude = location.getLongitude();
-
         storeInSharedPreferences(latitude, longitude);
 
         Log.d(TAG, String.format("Store home location: %f, %f", latitude, longitude));
@@ -43,17 +41,20 @@ public class HomePersister {
         double longitude = Double.longBitsToDouble(sharedPreferences.getLong(HOME_LONGITUDE, 0L));
 
         if (isSet(latitude, longitude)) {
-            Location location = new Location(PROVIDER);
-            location.setLatitude(latitude);
-            location.setLongitude(longitude);
-
-            return location;
+            return createLocation(latitude, longitude);
         }
-
         return null;
     }
 
     private static boolean isSet(double latitude, double longitude) {
         return latitude != 0.0 || longitude != 0.0;
+    }
+
+    private Location createLocation(double latitude, double longitude) {
+        Location location = new Location(PROVIDER);
+        location.setLatitude(latitude);
+        location.setLongitude(longitude);
+
+        return location;
     }
 }
