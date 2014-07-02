@@ -35,11 +35,7 @@ public class MainTextSetter implements LocationListener {
         } else {
             double distance = distanceCalculator.distanceInKm(latitude, longitude);
             String stringDistance = distanceFormat.format(distance);
-            if (stringDistance.equals("0")) {
-                mainText.setText("you're home");
-            } else {
-                mainText.setText(stringDistance + " km");
-            }
+            mainText.setText(stringDistance + " km");
         }
     }
 
