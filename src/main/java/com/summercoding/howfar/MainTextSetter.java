@@ -14,7 +14,7 @@ public class MainTextSetter implements LocationListener {
     private final TextView mainText;
 
     private final HomeDistanceCalculator distanceCalculator = new HomeDistanceCalculator();
-    private final DecimalFormat distanceFormat = new DecimalFormat("#.#");
+    private final DecimalFormat distanceFormat = new DecimalFormat("0.0");
 
     private boolean homeSet = false;
 
@@ -46,7 +46,7 @@ public class MainTextSetter implements LocationListener {
     public void updateHome(Location location) {
         if (location != null) {
             Log.d(TAG, String.format("Update home location: %f, %f", location.getLatitude(), location.getLongitude()));
-            
+
             homeSet = true;
             distanceCalculator.setHome(location);
         }
