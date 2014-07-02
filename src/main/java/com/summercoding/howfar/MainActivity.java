@@ -14,7 +14,7 @@ import android.widget.Toast;
 public class MainActivity extends FragmentActivity {
     private static final String PREFS_NAME = "HowFarPrefs";
 
-    public static final String HOME_SET_MESSAGE = "Home set";
+    public static final String HOME_SET_MESSAGE = "Home is set";
     public static final String HOME_NOT_SET_MESSAGE = "Current location not found";
 
     private LocationReceiver locationReceiver;
@@ -27,27 +27,30 @@ public class MainActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        TextView mainText = (TextView) findViewById(R.id.textView);
+        init();
+    }
+
+    private void init() {
         homeLocationPersister = new HomeLocationPersister(getSharedPreferences(PREFS_NAME, MODE_PRIVATE));
-        mainTextSetter = new MainTextSetter(mainText);
-        mainTextSetter.updateHome(homeLocationPersister.loadLocation());
+        mainTextSetter = new MainTextSetter((TextView) findViewById(R.id.textView));
         currentLocationProvider = new CurrentLocationProvider();
         locationReceiver = new LocationReceiver((LocationManager) getSystemService(Context.LOCATION_SERVICE));
+
         locationReceiver.addLocationListener(mainTextSetter);
         locationReceiver.addLocationListener(currentLocationProvider);
+
+        mainTextSetter.updateHome(homeLocationPersister.loadLocation());
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-
         locationReceiver.start();
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-
         locationReceiver.stop();
     }
 
@@ -71,13 +74,22 @@ public class MainActivity extends FragmentActivity {
     private void setHome() {
         Location currentLocation = currentLocationProvider.getCurrentLocation();
         if (currentLocation != null) {
-            homeLocationPersister.store(currentLocation);
-            mainTextSetter.updateHome(currentLocation);
-            mainTextSetter.onLocationChanged(currentLocation);
-
-            Toast.makeText(getApplicationContext(), HOME_SET_MESSAGE, Toast.LENGTH_LONG).show();
+            setHome(currentLocation);
+            showToast(HOME_SET_MESSAGE);
         } else {
-            Toast.makeText(getApplicationContext(), HOME_NOT_SET_MESSAGE, Toast.LENGTH_LONG).show();
+            showToast(HOME_NOT_SET_MESSAGE);
+        }
+    }
+
+    private void setHome(Location location) {
+        homeLocationPersister.store(location);
+        mainTextSetter.updateHome(location);
+    }
+
+    private void showToast(String message) {
+        Context context = getApplicationContext();
+        if (context != null) {
+            Toast.makeText(context, message, Toast.LENGTH_LONG).show();
         }
     }
 }

@@ -49,6 +49,7 @@ public class MainTextSetter implements LocationListener {
 
             isHomeSet = true;
             distanceCalculator.setHome(location);
+            onLocationChanged(location);
         }
     }
 }
