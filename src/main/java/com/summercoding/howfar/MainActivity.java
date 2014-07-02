@@ -33,11 +33,6 @@ public class MainActivity extends FragmentActivity {
         updateSetHomeButtonVisibility();
     }
 
-    private void updateSetHomeButtonVisibility() {
-        Button setHomeButton = (Button) findViewById(R.id.setHomeButton);
-        setHomeButton.setVisibility(Button.VISIBLE);
-    }
-
     private void init() {
         homeLocationPersister = new HomeLocationPersister(getSharedPreferences(PREFS_NAME, MODE_PRIVATE));
         mainTextSetter = new MainTextSetter((TextView) findViewById(R.id.mainTextView));
@@ -48,6 +43,17 @@ public class MainActivity extends FragmentActivity {
         locationReceiver.addLocationListener(currentLocationProvider);
 
         mainTextSetter.updateHome(homeLocationPersister.loadLocation());
+    }
+
+    private void updateSetHomeButtonVisibility() {
+        Button setHomeButton = (Button) findViewById(R.id.setHomeButton);
+
+        Location homeLocation = homeLocationPersister.loadLocation();
+        if (homeLocation == null) {
+            setHomeButton.setVisibility(Button.VISIBLE);
+        } else {
+            setHomeButton.setVisibility(Button.INVISIBLE);
+        }
     }
 
     @Override
@@ -96,6 +102,7 @@ public class MainActivity extends FragmentActivity {
     private void setHome(Location location) {
         homeLocationPersister.store(location);
         mainTextSetter.updateHome(location);
+        updateSetHomeButtonVisibility();
     }
 
     private void showToast(String message) {
