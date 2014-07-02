@@ -11,12 +11,12 @@ import java.text.DecimalFormat;
 public class MainTextSetter implements LocationListener {
     private static final String TAG = MainTextSetter.class.getSimpleName();
 
+    private final static DecimalFormat DECIMAL_FORMAT = new DecimalFormat("0.0");
+
     private final TextView mainText;
-
     private final HomeDistanceCalculator distanceCalculator = new HomeDistanceCalculator();
-    private final DecimalFormat distanceFormat = new DecimalFormat("0.0");
 
-    private boolean homeSet = false;
+    private boolean isHomeSet = false;
 
     public MainTextSetter(TextView mainText) {
         this.mainText = mainText;
@@ -30,20 +30,24 @@ public class MainTextSetter implements LocationListener {
     private void updateLocation(double latitude, double longitude) {
         Log.d(TAG, String.format("Update Location: %f, %f", latitude, longitude));
 
-        if (!homeSet) {
+        if (!isHomeSet) {
             mainText.setText("Where is your home?");
         } else {
-            double distance = distanceCalculator.distanceInKm(latitude, longitude);
-            String stringDistance = distanceFormat.format(distance);
-            mainText.setText(stringDistance + " km");
+            mainText.setText(createDistanceFromHomeText(latitude, longitude));
         }
+    }
+
+    private String createDistanceFromHomeText(double latitude, double longitude) {
+        double distance = distanceCalculator.distanceInKm(latitude, longitude);
+        String stringDistance = DECIMAL_FORMAT.format(distance);
+        return stringDistance + " km";
     }
 
     public void updateHome(Location location) {
         if (location != null) {
             Log.d(TAG, String.format("Update home location: %f, %f", location.getLatitude(), location.getLongitude()));
 
-            homeSet = true;
+            isHomeSet = true;
             distanceCalculator.setHome(location);
         }
     }
