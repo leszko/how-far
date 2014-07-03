@@ -30,9 +30,7 @@ public class MainTextSetter implements LocationListener {
     private void updateLocation(double latitude, double longitude) {
         Log.d(TAG, String.format("Update Location: %f, %f", latitude, longitude));
 
-        if (!isHomeSet) {
-            mainText.setText("Where is your home?");
-        } else {
+        if (isHomeSet) {
             mainText.setText(createDistanceFromHomeText(latitude, longitude));
         }
     }
