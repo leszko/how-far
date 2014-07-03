@@ -1,31 +1,44 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:background="@color/teal"
-    tools:context=".MainActivity">
+    tools:context=".MainActivity"
+    android:id="@+id/mainLayout">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:id="@+id/mainTextView"
-        android:gravity="center"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true"
-        android:textColor="@color/white"
-        android:textIsSelectable="false"
-        android:textSize="@dimen/main_text" />
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_weight="1">
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Set Home"
-        android:id="@+id/setHomeButton"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="60dp"
-        android:visibility="invisible"
-        android:onClick="onSetHomeButtonClicked" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:id="@+id/mainTextView"
+            android:gravity="center"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
+            android:textColor="@color/white"
+            android:textIsSelectable="false"
+            android:textSize="@dimen/main_text" />
+    </RelativeLayout>
 
-</RelativeLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="2"
+        android:id="@+id/buttonLayout">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Set Home"
+            android:id="@+id/setHomeButton"
+            android:layout_centerHorizontal="true"
+            android:visibility="visible"
+            android:onClick="onSetHomeButtonClicked" />
+    </RelativeLayout>
+
+</LinearLayout>

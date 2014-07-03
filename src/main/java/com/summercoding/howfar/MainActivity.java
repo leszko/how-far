@@ -9,7 +9,8 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -46,13 +47,17 @@ public class MainActivity extends FragmentActivity {
     }
 
     private void updateSetHomeButtonVisibility() {
-        Button setHomeButton = (Button) findViewById(R.id.setHomeButton);
-
         Location homeLocation = homeLocationPersister.loadLocation();
-        if (homeLocation == null) {
-            setHomeButton.setVisibility(Button.VISIBLE);
-        } else {
-            setHomeButton.setVisibility(Button.INVISIBLE);
+        if (homeLocation != null) {
+            removeButtonLayout();
+        }
+    }
+
+    private void removeButtonLayout() {
+        LinearLayout mainLayout = (LinearLayout) findViewById(R.id.mainLayout);
+        RelativeLayout buttonLayout = (RelativeLayout) findViewById(R.id.buttonLayout);
+        if (mainLayout != null && buttonLayout != null) {
+            mainLayout.removeView(buttonLayout);
         }
     }
 
