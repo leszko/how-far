@@ -3,4 +3,6 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="main_text">50dp</dimen>
+    <dimen name="set_home_button">30dp</dimen>
+    <dimen name="set_home_button_padding_horizontal">30dp</dimen>
 </resources>

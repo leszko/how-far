@@ -39,7 +39,10 @@
             android:id="@+id/setHomeButton"
             android:layout_centerHorizontal="true"
             android:visibility="visible"
-            android:onClick="onSetHomeButtonClicked" />
+            android:onClick="onSetHomeButtonClicked"
+            android:textSize="@dimen/set_home_button"
+            android:paddingLeft="@dimen/set_home_button_padding_horizontal"
+            android:paddingRight="@dimen/set_home_button_padding_horizontal" />
     </RelativeLayout>
 
 </LinearLayout>
