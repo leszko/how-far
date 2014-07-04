@@ -3,12 +3,15 @@ package com.summercoding.howfar;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.google.android.gms.location.LocationListener;
 
 import java.util.LinkedList;
 
 public class LocationReceiver implements android.location.LocationListener {
+
+    private final static String TAG = LocationReceiver.class.getSimpleName();
 
     private static final String PROVIDER = LocationManager.GPS_PROVIDER;
     private static final String NETWORK_PROVIDER = LocationManager.NETWORK_PROVIDER;
@@ -44,6 +47,8 @@ public class LocationReceiver implements android.location.LocationListener {
 
     @Override
     public void onLocationChanged(Location location) {
+        Log.d(TAG, String.format("onLocationChanged %f, %f", location.getLatitude(), location.getLongitude()));
+
         if (location.getAccuracy() < MIN_ACCURACY) {
             notifyLocationListeners(location);
         }
@@ -62,16 +67,11 @@ public class LocationReceiver implements android.location.LocationListener {
 
     @Override
     public void onProviderEnabled(String provider) {
-        refreshLocationUpdates();
+        // do nothing
     }
 
     @Override
     public void onProviderDisabled(String provider) {
-        refreshLocationUpdates();
-    }
-
-    private void refreshLocationUpdates() {
-        stop();
-        start();
+        // do nothing
     }
 }
