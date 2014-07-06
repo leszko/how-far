@@ -38,3 +38,4 @@ proguard/
 *.swp
 
 keys/
+gradle.properties
