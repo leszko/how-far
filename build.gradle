@@ -27,4 +27,22 @@ android {
         minSdkVersion 9
         targetSdkVersion 10
     }
+
+    buildTypes {
+
+        signingConfigs {
+            releaseConfig {
+                storeFile file("keys/release.keystore")
+                storePassword "***"
+                keyAlias "***"
+                keyPassword "***"
+            }
+        }
+
+        release {
+            runProguard true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+            signingConfig signingConfigs.releaseConfig
+        }
+    }
 }
