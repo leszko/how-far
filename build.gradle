@@ -32,10 +32,10 @@ android {
 
         signingConfigs {
             releaseConfig {
-                storeFile file("keys/release.keystore")
-                storePassword "***"
-                keyAlias "***"
-                keyPassword "***"
+                storeFile file(releaseStoreFile)
+                storePassword releaseStorePassword
+                keyAlias releaseKeyAlias
+                keyPassword releaseKeyPassword
             }
         }
 
