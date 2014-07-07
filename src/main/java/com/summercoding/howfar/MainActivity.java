@@ -26,6 +26,20 @@ public class MainActivity extends FragmentActivity {
     private MainTextSetter mainTextSetter;
 
     @Override
+    protected void onSaveInstanceState(Bundle SavedInstanceState) {
+        super.onSaveInstanceState(SavedInstanceState);
+        TextView mainText = (TextView) findViewById(R.id.mainTextView);
+        SavedInstanceState.putCharSequence("mainText", mainText.getText());
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        TextView mainText = (TextView) findViewById(R.id.mainTextView);
+        mainText.setText(savedInstanceState.getCharSequence("mainText"));
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
