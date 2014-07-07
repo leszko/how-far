@@ -18,7 +18,7 @@ public class LocationReceiver implements android.location.LocationListener {
 
     private static final long MIN_TIME = 1000L;
     private static final float MIN_DISTANCE = 50;
-    private static final double MIN_ACCURACY = 50;
+    private static final double MIN_ACCURACY = 200;
 
     private final LocationManager locationManager;
     private final LinkedList<LocationListener> locationListeners;
