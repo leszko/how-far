@@ -13,12 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.summercoding.howfar;
+
+package com.summercoding.howfar.com.summercoding.howfar.thirdparty;
 
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+
+import com.summercoding.howfar.R;
 
 import java.io.BufferedReader;
 import java.io.Closeable;
@@ -32,7 +35,7 @@ import java.io.InputStreamReader;
  * be shown again. If the user refuses, {@link android.app.Activity#finish()} is invoked
  * on your activity.
  */
-class Eula {
+public class Eula {
     private static final String ASSET_EULA = "EULA";
     private static final String PREFERENCE_EULA_ACCEPTED = "eula.accepted";
     private static final String PREFERENCES_EULA = "eula";
@@ -55,14 +58,14 @@ class Eula {
      * @param activity The Activity to finish if the user rejects the EULA.
      * @return Whether the user has agreed already.
      */
-    static boolean show(final Activity activity) {
+    public static boolean show(final Activity activity) {
         final SharedPreferences preferences = activity.getSharedPreferences(PREFERENCES_EULA,
                 Activity.MODE_PRIVATE);
         if (!preferences.getBoolean(PREFERENCE_EULA_ACCEPTED, false)) {
             final AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-            builder.setTitle("Title");
+            builder.setTitle(R.string.eula_title);
             builder.setCancelable(true);
-            builder.setPositiveButton("Accept", new DialogInterface.OnClickListener() {
+            builder.setPositiveButton(R.string.eula_accept, new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
                     accept(preferences);
                     if (activity instanceof OnEulaAgreedTo) {
@@ -70,7 +73,7 @@ class Eula {
                     }
                 }
             });
-            builder.setNegativeButton("Refuse", new DialogInterface.OnClickListener() {
+            builder.setNegativeButton(R.string.eula_refuse, new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
                     refuse(activity);
                 }

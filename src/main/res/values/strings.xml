@@ -4,5 +4,8 @@
     <string name="app_name">How Far</string>
     <string name="action_set_home">Set home</string>
     <string name="main_text_default">Where is your home?</string>
+    <string name="eula_title">End User License Agreement</string>
+    <string name="eula_accept">OK</string>
+    <string name="eula_refuse">Cancel</string>
 
 </resources>

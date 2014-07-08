@@ -14,6 +14,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.summercoding.howfar.com.summercoding.howfar.thirdparty.Eula;
+
 public class MainActivity extends FragmentActivity {
     private static final String PREFS_NAME = "HowFarPrefs";
 
