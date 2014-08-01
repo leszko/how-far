@@ -1,6 +1,7 @@
 package com.summercoding.howfar;
 
 import android.content.Context;
+import android.content.Intent;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
@@ -15,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.summercoding.howfar.com.summercoding.howfar.thirdparty.Eula;
+import com.summercoding.howfar.record.RecordActivity;
 
 public class MainActivity extends FragmentActivity {
     private static final String PREFS_NAME = "HowFarPrefs";
@@ -102,6 +104,8 @@ public class MainActivity extends FragmentActivity {
         switch (item.getItemId()) {
             case R.id.action_set_home:
                 setHome();
+            case R.id.action_record:
+                onRecordActionClicked();
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -125,6 +129,11 @@ public class MainActivity extends FragmentActivity {
         homeLocationPersister.store(location);
         mainTextSetter.updateHome(location);
         updateSetHomeButtonVisibility();
+    }
+
+    private void onRecordActionClicked() {
+        Intent intent = new Intent(this, RecordActivity.class);
+        startActivity(intent);
     }
 
     private void showToast(String message) {

@@ -2,4 +2,5 @@
 <resources>
     <item name="teal" type="color">#28c2be</item>
     <item name="white" type="color">#ffffff</item>
+    <item name="orange" type="color">#c37028</item>
 </resources>

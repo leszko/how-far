@@ -4,4 +4,9 @@
         android:title="@string/action_set_home"
         android:orderInCategory="100"
         android:showAsAction="never" />
+    <item
+        android:id="@+id/action_record"
+        android:title="@string/action_record"
+        android:orderInCategory="101"
+        android:showAsAction="never" />
 </menu>
