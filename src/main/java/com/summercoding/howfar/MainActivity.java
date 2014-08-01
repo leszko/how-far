@@ -2,6 +2,7 @@ package com.summercoding.howfar;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
@@ -17,6 +18,8 @@ import android.widget.Toast;
 
 import com.summercoding.howfar.com.summercoding.howfar.thirdparty.Eula;
 import com.summercoding.howfar.record.RecordActivity;
+import com.summercoding.howfar.record.RecordLocationListener;
+import com.summercoding.howfar.record.RecordPersister;
 
 public class MainActivity extends FragmentActivity {
     private static final String PREFS_NAME = "HowFarPrefs";
@@ -24,6 +27,7 @@ public class MainActivity extends FragmentActivity {
     public static final String HOME_SET_MESSAGE = "Home is set";
     public static final String HOME_NOT_SET_MESSAGE = "Current location not found";
 
+    private final HomeDistanceCalculator distanceCalculator = new HomeDistanceCalculator();
     private LocationReceiver locationReceiver;
     private CurrentLocationProvider currentLocationProvider;
     private HomeLocationPersister homeLocationPersister;
@@ -54,13 +58,19 @@ public class MainActivity extends FragmentActivity {
     }
 
     private void init() {
-        homeLocationPersister = new HomeLocationPersister(getSharedPreferences(PREFS_NAME, MODE_PRIVATE));
-        mainTextSetter = new MainTextSetter((TextView) findViewById(R.id.mainTextView));
+        SharedPreferences sharedPreferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        homeLocationPersister = new HomeLocationPersister(sharedPreferences);
+        RecordPersister recordPersister = new RecordPersister(sharedPreferences);
+
+        mainTextSetter = new MainTextSetter((TextView) findViewById(R.id.mainTextView), distanceCalculator);
         currentLocationProvider = new CurrentLocationProvider();
         locationReceiver = new LocationReceiver((LocationManager) getSystemService(Context.LOCATION_SERVICE));
 
+        RecordLocationListener recordLocationListener = new RecordLocationListener(recordPersister, distanceCalculator);
+
         locationReceiver.addLocationListener(mainTextSetter);
         locationReceiver.addLocationListener(currentLocationProvider);
+        locationReceiver.addLocationListener(recordLocationListener);
 
         mainTextSetter.updateHome(homeLocationPersister.loadLocation());
     }
@@ -127,7 +137,9 @@ public class MainActivity extends FragmentActivity {
 
     private void setHome(Location location) {
         homeLocationPersister.store(location);
+        distanceCalculator.setHome(location);
         mainTextSetter.updateHome(location);
+
         updateSetHomeButtonVisibility();
     }
 

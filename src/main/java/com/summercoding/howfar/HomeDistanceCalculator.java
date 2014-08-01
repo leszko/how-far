@@ -14,7 +14,10 @@ public class HomeDistanceCalculator {
         homeLongitude = location.getLongitude();
     }
 
-    public double distanceInKm(double latitude, double longitude) {
+    public double distanceInKm(Location location) {
+        double latitude = location.getLatitude();
+        double longitude = location.getLongitude();
+        
         float[] result = new float[1];
         Location.distanceBetween(homeLatitude, homeLongitude, latitude, longitude, result);
         return result[0] / KILO;
