@@ -29,7 +29,9 @@ public class MainTextSetter implements LocationListener {
     }
 
     public void updateHome(Location location) {
-        isHomeSet = true;
-        onLocationChanged(location);
+        if (location != null) {
+            isHomeSet = true;
+            onLocationChanged(location);
+        }
     }
 }

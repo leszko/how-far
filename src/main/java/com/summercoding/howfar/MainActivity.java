@@ -72,7 +72,9 @@ public class MainActivity extends FragmentActivity {
         locationReceiver.addLocationListener(currentLocationProvider);
         locationReceiver.addLocationListener(recordLocationListener);
 
-        mainTextSetter.updateHome(homeLocationPersister.loadLocation());
+        Location homeLocation = homeLocationPersister.loadLocation();
+        distanceCalculator.setHome(homeLocation);
+        mainTextSetter.updateHome(homeLocation);
     }
 
     private void updateSetHomeButtonVisibility() {
@@ -114,8 +116,10 @@ public class MainActivity extends FragmentActivity {
         switch (item.getItemId()) {
             case R.id.action_set_home:
                 setHome();
+                return true;
             case R.id.action_record:
                 onRecordActionClicked();
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
