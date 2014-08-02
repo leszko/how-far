@@ -17,8 +17,6 @@ public class LocationReceiver implements android.location.LocationListener {
     private static final String PROVIDER = LocationManager.GPS_PROVIDER;
     private static final String NETWORK_PROVIDER = LocationManager.NETWORK_PROVIDER;
 
-    private static LocationReceiver INSTANCE;
-
     private static final long MIN_TIME = 1000L;
     private static final float MIN_DISTANCE = 50;
     private static final double MIN_ACCURACY = 200;
@@ -26,19 +24,9 @@ public class LocationReceiver implements android.location.LocationListener {
     private final LinkedList<LocationListener> locationListeners;
     private LocationManager locationManager;
 
-    private LocationReceiver() {
-        this.locationListeners = new LinkedList<LocationListener>();
-    }
-
-    public static LocationReceiver getInstance() {
-        if (INSTANCE == null) {
-            INSTANCE = new LocationReceiver();
-        }
-        return INSTANCE;
-    }
-
-    public void setLocationManager(LocationManager locationManager) {
+    public LocationReceiver(LocationManager locationManager) {
         this.locationManager = locationManager;
+        this.locationListeners = new LinkedList<LocationListener>();
     }
 
     public void addLocationListener(LocationListener locationListener) {

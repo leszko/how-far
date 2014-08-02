@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.widget.TextView;
 
+import com.summercoding.howfar.HowFarApplication;
 import com.summercoding.howfar.LocationReceiver;
 import com.summercoding.howfar.Persister;
 import com.summercoding.howfar.R;
@@ -23,7 +24,7 @@ public class RecordActivity extends FragmentActivity {
     }
 
     private void init() {
-        locationReceiver = LocationReceiver.getInstance();
+        locationReceiver = ((HowFarApplication) getApplication()).getLocationReceiver();
         Persister persister = new Persister(getSharedPreferences(PREFS_NAME, MODE_PRIVATE));
         TextView textView = (TextView) findViewById(R.id.recordTextView);
         recordTextUpdater = new RecordTextUpdater(textView, persister);

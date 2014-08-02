@@ -62,9 +62,7 @@ public class MainActivity extends FragmentActivity {
         persister = new Persister(getSharedPreferences(PREFS_NAME, MODE_PRIVATE));
         mainTextUpdater = new MainTextUpdater((TextView) findViewById(R.id.mainTextView), distanceCalculator);
         currentLocationProvider = new CurrentLocationProvider();
-        locationReceiver = LocationReceiver.getInstance();
-        locationReceiver.setLocationManager((LocationManager) getSystemService(Context.LOCATION_SERVICE));
-
+        locationReceiver = new LocationReceiver((LocationManager) getSystemService(Context.LOCATION_SERVICE));
         RecordLocationListener recordLocationListener = new RecordLocationListener(persister, distanceCalculator);
 
         locationReceiver.addLocationListener(mainTextUpdater);
@@ -74,6 +72,8 @@ public class MainActivity extends FragmentActivity {
         Location homeLocation = persister.loadLocation();
         distanceCalculator.setHome(homeLocation);
         mainTextUpdater.onLocationChanged(homeLocation);
+
+        ((HowFarApplication) getApplication()).setLocationReceiver(locationReceiver);
     }
 
     @Override
