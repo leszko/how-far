@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.google.android.gms.location.LocationListener;
+import com.summercoding.howfar.utils.Preconditions;
 
 import java.util.LinkedList;
 
@@ -16,23 +17,41 @@ public class LocationReceiver implements android.location.LocationListener {
     private static final String PROVIDER = LocationManager.GPS_PROVIDER;
     private static final String NETWORK_PROVIDER = LocationManager.NETWORK_PROVIDER;
 
+    private static LocationReceiver INSTANCE;
+
     private static final long MIN_TIME = 1000L;
     private static final float MIN_DISTANCE = 50;
     private static final double MIN_ACCURACY = 200;
 
-    private final LocationManager locationManager;
     private final LinkedList<LocationListener> locationListeners;
+    private LocationManager locationManager;
 
-    public LocationReceiver(LocationManager locationManager) {
-        this.locationManager = locationManager;
+    private LocationReceiver() {
         this.locationListeners = new LinkedList<LocationListener>();
+    }
+
+    public static LocationReceiver getInstance() {
+        if (INSTANCE == null) {
+            INSTANCE = new LocationReceiver();
+        }
+        return INSTANCE;
+    }
+
+    public void setLocationManager(LocationManager locationManager) {
+        this.locationManager = locationManager;
     }
 
     public void addLocationListener(LocationListener locationListener) {
         locationListeners.add(locationListener);
     }
 
+    public void removeLocationListener(LocationListener locationListener) {
+        locationListeners.remove(locationListener);
+    }
+
     public void start() {
+        Preconditions.checkNotNull(locationManager);
+
         if (locationManager.getAllProviders().contains(PROVIDER)) {
             locationManager.requestLocationUpdates(PROVIDER, MIN_TIME, MIN_DISTANCE, this);
         }
@@ -42,6 +61,8 @@ public class LocationReceiver implements android.location.LocationListener {
     }
 
     public void stop() {
+        Preconditions.checkNotNull(locationManager);
+
         locationManager.removeUpdates(this);
     }
 

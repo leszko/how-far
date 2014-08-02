@@ -54,13 +54,16 @@ public class MainActivity extends FragmentActivity {
 
         init();
         updateSetHomeButtonVisibility();
+
+        locationReceiver.start();
     }
 
     private void init() {
         persister = new Persister(getSharedPreferences(PREFS_NAME, MODE_PRIVATE));
         mainTextUpdater = new MainTextUpdater((TextView) findViewById(R.id.mainTextView), distanceCalculator);
         currentLocationProvider = new CurrentLocationProvider();
-        locationReceiver = new LocationReceiver((LocationManager) getSystemService(Context.LOCATION_SERVICE));
+        locationReceiver = LocationReceiver.getInstance();
+        locationReceiver.setLocationManager((LocationManager) getSystemService(Context.LOCATION_SERVICE));
 
         RecordLocationListener recordLocationListener = new RecordLocationListener(persister, distanceCalculator);
 
@@ -74,14 +77,8 @@ public class MainActivity extends FragmentActivity {
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
-        locationReceiver.start();
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
+    protected void onDestroy() {
+        super.onDestroy();
         locationReceiver.stop();
     }
 
