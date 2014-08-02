@@ -2,7 +2,6 @@ package com.summercoding.howfar;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
@@ -16,10 +15,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.summercoding.howfar.thirdparty.Eula;
 import com.summercoding.howfar.record.RecordActivity;
 import com.summercoding.howfar.record.RecordLocationListener;
-import com.summercoding.howfar.record.RecordPersister;
+import com.summercoding.howfar.thirdparty.Eula;
 
 public class MainActivity extends FragmentActivity {
     private static final String PREFS_NAME = "HowFarPrefs";
@@ -29,9 +27,9 @@ public class MainActivity extends FragmentActivity {
 
     private final HomeDistanceCalculator distanceCalculator = new HomeDistanceCalculator();
     private LocationReceiver locationReceiver;
+    private Persister persister;
+    private MainTextUpdater mainTextUpdater;
     private CurrentLocationProvider currentLocationProvider;
-    private HomeLocationPersister homeLocationPersister;
-    private MainTextSetter mainTextSetter;
 
     @Override
     protected void onSaveInstanceState(Bundle SavedInstanceState) {
@@ -40,6 +38,7 @@ public class MainActivity extends FragmentActivity {
         SavedInstanceState.putCharSequence("mainText", mainText.getText());
     }
 
+    @SuppressWarnings("NullableProblems")
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
@@ -58,38 +57,20 @@ public class MainActivity extends FragmentActivity {
     }
 
     private void init() {
-        SharedPreferences sharedPreferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-        homeLocationPersister = new HomeLocationPersister(sharedPreferences);
-        RecordPersister recordPersister = new RecordPersister(sharedPreferences);
-
-        mainTextSetter = new MainTextSetter((TextView) findViewById(R.id.mainTextView), distanceCalculator);
+        persister = new Persister(getSharedPreferences(PREFS_NAME, MODE_PRIVATE));
+        mainTextUpdater = new MainTextUpdater((TextView) findViewById(R.id.mainTextView), distanceCalculator);
         currentLocationProvider = new CurrentLocationProvider();
         locationReceiver = new LocationReceiver((LocationManager) getSystemService(Context.LOCATION_SERVICE));
 
-        RecordLocationListener recordLocationListener = new RecordLocationListener(recordPersister, distanceCalculator);
+        RecordLocationListener recordLocationListener = new RecordLocationListener(persister, distanceCalculator);
 
-        locationReceiver.addLocationListener(mainTextSetter);
+        locationReceiver.addLocationListener(mainTextUpdater);
         locationReceiver.addLocationListener(currentLocationProvider);
         locationReceiver.addLocationListener(recordLocationListener);
 
-        Location homeLocation = homeLocationPersister.loadLocation();
+        Location homeLocation = persister.loadLocation();
         distanceCalculator.setHome(homeLocation);
-        mainTextSetter.updateHome(homeLocation);
-    }
-
-    private void updateSetHomeButtonVisibility() {
-        Location homeLocation = homeLocationPersister.loadLocation();
-        if (homeLocation != null) {
-            removeButtonLayout();
-        }
-    }
-
-    private void removeButtonLayout() {
-        LinearLayout mainLayout = (LinearLayout) findViewById(R.id.mainLayout);
-        RelativeLayout buttonLayout = (RelativeLayout) findViewById(R.id.buttonLayout);
-        if (mainLayout != null && buttonLayout != null) {
-            mainLayout.removeView(buttonLayout);
-        }
+        mainTextUpdater.onLocationChanged(homeLocation);
     }
 
     @Override
@@ -140,11 +121,25 @@ public class MainActivity extends FragmentActivity {
     }
 
     private void setHome(Location location) {
-        homeLocationPersister.store(location);
+        persister.storeLocation(location);
         distanceCalculator.setHome(location);
-        mainTextSetter.updateHome(location);
-
+        mainTextUpdater.onLocationChanged(location);
         updateSetHomeButtonVisibility();
+    }
+
+    private void updateSetHomeButtonVisibility() {
+        Location homeLocation = persister.loadLocation();
+        if (homeLocation != null) {
+            removeButtonLayout();
+        }
+    }
+
+    private void removeButtonLayout() {
+        LinearLayout mainLayout = (LinearLayout) findViewById(R.id.mainLayout);
+        RelativeLayout buttonLayout = (RelativeLayout) findViewById(R.id.buttonLayout);
+        if (mainLayout != null && buttonLayout != null) {
+            mainLayout.removeView(buttonLayout);
+        }
     }
 
     private void onRecordActionClicked() {

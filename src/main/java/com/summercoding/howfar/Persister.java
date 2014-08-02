@@ -6,35 +6,40 @@ import android.util.Log;
 
 import com.summercoding.howfar.utils.Preconditions;
 
-public class HomeLocationPersister {
+public class Persister {
 
-    private final static String TAG = HomeLocationPersister.class.getSimpleName();
+    private final static String TAG = Persister.class.getSimpleName();
 
     private final static String HOME_LATITUDE = "homeLatitude";
     private final static String HOME_LONGITUDE = "homeLongitude";
+    private final static String RECORD_DISTANCE = "recordDistance";
 
     private final static String PROVIDER = "STORED";
 
     private final SharedPreferences sharedPreferences;
 
-    public HomeLocationPersister(SharedPreferences sharedPreferences) {
+    public Persister(SharedPreferences sharedPreferences) {
         this.sharedPreferences = sharedPreferences;
     }
 
-    public void store(Location location) {
+    public void storeLocation(Location location) {
         Preconditions.checkNotNull(location);
 
-        double latitude = location.getLatitude();
-        double longitude = location.getLongitude();
-        storeInSharedPreferences(latitude, longitude);
+        storeInSharedPreferences(HOME_LATITUDE, location.getLatitude());
+        storeInSharedPreferences(HOME_LONGITUDE, location.getLongitude());
 
-        Log.d(TAG, String.format("Store home location: %f, %f", latitude, longitude));
+        Log.d(TAG, "Store home location: " + location);
     }
 
-    private void storeInSharedPreferences(double latitude, double longitude) {
+    public void storeRecord(double recordDistance) {
+        storeInSharedPreferences(RECORD_DISTANCE, recordDistance);
+
+        Log.d(TAG, "Store record distance: " + recordDistance);
+    }
+
+    private void storeInSharedPreferences(String key, double value) {
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putLong(HOME_LATITUDE, Double.doubleToRawLongBits(latitude));
-        editor.putLong(HOME_LONGITUDE, Double.doubleToRawLongBits(longitude));
+        editor.putLong(key, Double.doubleToRawLongBits(value));
         editor.commit();
     }
 
@@ -58,5 +63,9 @@ public class HomeLocationPersister {
         location.setLongitude(longitude);
 
         return location;
+    }
+
+    public double loadRecord() {
+        return Double.longBitsToDouble(sharedPreferences.getLong(RECORD_DISTANCE, 0L));
     }
 }

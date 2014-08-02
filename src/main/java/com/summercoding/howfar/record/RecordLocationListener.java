@@ -4,19 +4,20 @@ import android.location.Location;
 
 import com.google.android.gms.location.LocationListener;
 import com.summercoding.howfar.HomeDistanceCalculator;
+import com.summercoding.howfar.Persister;
 
 public class RecordLocationListener implements LocationListener {
 
     private final HomeDistanceCalculator distanceCalculator;
-    private final RecordPersister recordPersister;
+    private final Persister persister;
 
     private double recordDistance;
 
-    public RecordLocationListener(RecordPersister recordPersister, HomeDistanceCalculator distanceCalculator) {
-        this.recordPersister = recordPersister;
+    public RecordLocationListener(Persister persister, HomeDistanceCalculator distanceCalculator) {
+        this.persister = persister;
         this.distanceCalculator = distanceCalculator;
 
-        recordDistance = recordPersister.load();
+        recordDistance = persister.loadRecord();
     }
 
     @Override
@@ -24,7 +25,7 @@ public class RecordLocationListener implements LocationListener {
         if (distanceCalculator.isHomeSet()) {
             double distance = distanceCalculator.distanceInKm(location);
             if (distance > recordDistance) {
-                recordPersister.store(distance);
+                persister.storeRecord(distance);
                 recordDistance = distance;
             }
         }

@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.widget.TextView;
 
+import com.summercoding.howfar.Persister;
 import com.summercoding.howfar.R;
 import com.summercoding.howfar.utils.Utils;
 
@@ -19,8 +20,8 @@ public class RecordActivity extends FragmentActivity {
     }
 
     private void updateRecordText() {
-        RecordPersister recordPersister = new RecordPersister(getSharedPreferences(PREFS_NAME, MODE_PRIVATE));
-        double recordDistance = recordPersister.load();
+        Persister recordPersister = new Persister(getSharedPreferences(PREFS_NAME, MODE_PRIVATE));
+        double recordDistance = recordPersister.loadRecord();
         if (isSet(recordDistance)) {
             TextView recordTextView = (TextView) findViewById(R.id.recordTextView);
             recordTextView.setText(Utils.formatMainText(recordDistance));
