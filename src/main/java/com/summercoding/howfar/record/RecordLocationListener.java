@@ -21,10 +21,12 @@ public class RecordLocationListener implements LocationListener {
 
     @Override
     public void onLocationChanged(Location location) {
-        double distance = distanceCalculator.distanceInKm(location);
-        if (distance > recordDistance) {
-            recordPersister.store(distance);
-            recordDistance = distance;
+        if (distanceCalculator.isHomeSet()) {
+            double distance = distanceCalculator.distanceInKm(location);
+            if (distance > recordDistance) {
+                recordPersister.store(distance);
+                recordDistance = distance;
+            }
         }
     }
 }

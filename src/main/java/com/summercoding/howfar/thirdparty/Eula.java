@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.summercoding.howfar.com.summercoding.howfar.thirdparty;
+package com.summercoding.howfar.thirdparty;
 
 import android.app.Activity;
 import android.app.AlertDialog;

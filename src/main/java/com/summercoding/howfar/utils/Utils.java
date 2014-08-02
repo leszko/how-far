@@ -1,4 +1,4 @@
-package com.summercoding.howfar;
+package com.summercoding.howfar.utils;
 
 import java.text.DecimalFormat;
 

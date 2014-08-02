@@ -1,4 +1,4 @@
-package com.summercoding.howfar;
+package com.summercoding.howfar.utils;
 
 public class Preconditions {
     public static void checkNotNull(Object object) {

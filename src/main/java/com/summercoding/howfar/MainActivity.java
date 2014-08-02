@@ -16,7 +16,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.summercoding.howfar.com.summercoding.howfar.thirdparty.Eula;
+import com.summercoding.howfar.thirdparty.Eula;
 import com.summercoding.howfar.record.RecordActivity;
 import com.summercoding.howfar.record.RecordLocationListener;
 import com.summercoding.howfar.record.RecordPersister;

@@ -2,24 +2,32 @@ package com.summercoding.howfar;
 
 import android.location.Location;
 
+import com.summercoding.howfar.utils.Preconditions;
+
 public class HomeDistanceCalculator {
     private static final double KILO = 1000;
 
-    private double homeLatitude = 0.0;
-    private double homeLongitude = 0.0;
+    private Location homeLocation = null;
 
     public void setHome(Location location) {
-        Preconditions.checkNotNull(location);
-        homeLatitude = location.getLatitude();
-        homeLongitude = location.getLongitude();
+        homeLocation = location;
     }
 
     public double distanceInKm(Location location) {
+        Preconditions.checkNotNull(homeLocation);
+        Preconditions.checkNotNull(location);
+
+        double homeLatitude = homeLocation.getLatitude();
+        double homeLongitude = homeLocation.getLongitude();
         double latitude = location.getLatitude();
         double longitude = location.getLongitude();
-        
+
         float[] result = new float[1];
         Location.distanceBetween(homeLatitude, homeLongitude, latitude, longitude, result);
         return result[0] / KILO;
+    }
+
+    public boolean isHomeSet() {
+        return homeLocation != null;
     }
 }

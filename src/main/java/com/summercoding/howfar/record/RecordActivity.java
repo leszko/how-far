@@ -5,7 +5,7 @@ import android.support.v4.app.FragmentActivity;
 import android.widget.TextView;
 
 import com.summercoding.howfar.R;
-import com.summercoding.howfar.Utils;
+import com.summercoding.howfar.utils.Utils;
 
 public class RecordActivity extends FragmentActivity {
     private static final String PREFS_NAME = "HowFarPrefs";

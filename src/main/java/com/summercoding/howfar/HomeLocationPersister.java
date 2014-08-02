@@ -4,6 +4,8 @@ import android.content.SharedPreferences;
 import android.location.Location;
 import android.util.Log;
 
+import com.summercoding.howfar.utils.Preconditions;
+
 public class HomeLocationPersister {
 
     private final static String TAG = HomeLocationPersister.class.getSimpleName();
