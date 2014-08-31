@@ -27,6 +27,10 @@ public class HomeDistanceCalculator {
         return result[0] / KILO;
     }
 
+    public float bearingTo(Location location) {
+        return homeLocation.bearingTo(location);
+    }
+
     public boolean isHomeSet() {
         return homeLocation != null;
     }

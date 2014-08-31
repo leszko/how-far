@@ -6,6 +6,7 @@ import android.widget.TextView;
 
 import com.google.android.gms.location.LocationListener;
 import com.summercoding.howfar.utils.Utils;
+import com.summercoding.howfar.view.Arrow;
 
 public class MainTextUpdater implements LocationListener {
     private static final String TAG = MainTextUpdater.class.getSimpleName();
@@ -13,7 +14,7 @@ public class MainTextUpdater implements LocationListener {
     private final TextView mainText;
     private final HomeDistanceCalculator distanceCalculator;
 
-    public MainTextUpdater(TextView mainText, HomeDistanceCalculator distanceCalculator) {
+    public MainTextUpdater(TextView mainText, Arrow homeDirectionArrow, HomeDistanceCalculator distanceCalculator) {
         this.mainText = mainText;
         this.distanceCalculator = distanceCalculator;
     }

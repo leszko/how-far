@@ -2,6 +2,7 @@ package com.summercoding.howfar;
 
 import android.content.Context;
 import android.content.Intent;
+import android.hardware.SensorManager;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
@@ -10,6 +11,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -18,6 +20,7 @@ import android.widget.Toast;
 import com.summercoding.howfar.record.RecordActivity;
 import com.summercoding.howfar.record.RecordLocationListener;
 import com.summercoding.howfar.thirdparty.Eula;
+import com.summercoding.howfar.view.Arrow;
 
 public class MainActivity extends FragmentActivity {
     private static final String PREFS_NAME = "HowFarPrefs";
@@ -27,9 +30,11 @@ public class MainActivity extends FragmentActivity {
 
     private final HomeDistanceCalculator distanceCalculator = new HomeDistanceCalculator();
     private LocationReceiver locationReceiver;
+    private OrientationReceiver orientationReceiver;
     private Persister persister;
     private MainTextUpdater mainTextUpdater;
     private CurrentLocationProvider currentLocationProvider;
+    private HomeDirectionUpdater homeDirectionUpdater;
 
     @Override
     protected void onSaveInstanceState(Bundle SavedInstanceState) {
@@ -54,13 +59,29 @@ public class MainActivity extends FragmentActivity {
 
         init();
         updateSetHomeButtonVisibility();
+        updateSetArrowVisibility();
 
         locationReceiver.start();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        orientationReceiver.start();
+    }
+
+    @Override
+    protected void onPause() {
+        orientationReceiver.stop();
+        super.onPause();
+    }
+
     private void init() {
         persister = new Persister(getSharedPreferences(PREFS_NAME, MODE_PRIVATE));
-        mainTextUpdater = new MainTextUpdater((TextView) findViewById(R.id.mainTextView), distanceCalculator);
+        mainTextUpdater = new MainTextUpdater(
+                (TextView) findViewById(R.id.mainTextView),
+                (Arrow) findViewById(R.id.homeDirectionArrow),
+                distanceCalculator);
         currentLocationProvider = new CurrentLocationProvider();
         locationReceiver = new LocationReceiver((LocationManager) getSystemService(Context.LOCATION_SERVICE));
         RecordLocationListener recordLocationListener = new RecordLocationListener(persister, distanceCalculator);
@@ -74,6 +95,15 @@ public class MainActivity extends FragmentActivity {
         mainTextUpdater.onLocationChanged(homeLocation);
 
         ((HowFarApplication) getApplication()).setLocationReceiver(locationReceiver);
+
+        orientationReceiver = new OrientationReceiver((SensorManager) getSystemService(Context.SENSOR_SERVICE));
+        homeDirectionUpdater = new HomeDirectionUpdater(
+                (Arrow)findViewById(R.id.homeDirectionArrow),
+                distanceCalculator
+        );
+
+        orientationReceiver.setDirectionListener(homeDirectionUpdater);
+        locationReceiver.addLocationListener(homeDirectionUpdater);
     }
 
     @Override
@@ -124,18 +154,33 @@ public class MainActivity extends FragmentActivity {
         updateSetHomeButtonVisibility();
     }
 
-    private void updateSetHomeButtonVisibility() {
+    private boolean hasLocation() {
         Location homeLocation = persister.loadLocation();
-        if (homeLocation != null) {
+        return homeLocation != null;
+    }
+
+    private void updateSetHomeButtonVisibility() {
+        if (hasLocation()) {
             removeButtonLayout();
         }
     }
 
     private void removeButtonLayout() {
         LinearLayout mainLayout = (LinearLayout) findViewById(R.id.mainLayout);
-        RelativeLayout buttonLayout = (RelativeLayout) findViewById(R.id.buttonLayout);
-        if (mainLayout != null && buttonLayout != null) {
-            mainLayout.removeView(buttonLayout);
+        Button setHomeButton = (Button) findViewById(R.id.setHomeButton);
+        if (mainLayout != null && setHomeButton != null) {
+            mainLayout.removeView(setHomeButton);
+        }
+    }
+
+    private void updateSetArrowVisibility() {
+        Arrow homeDirectionArrow = (Arrow) findViewById(R.id.homeDirectionArrow);
+        if (homeDirectionArrow != null) {
+            if (hasLocation()) {
+                homeDirectionArrow.setVisibility(View.VISIBLE);
+            } else {
+                homeDirectionArrow.setVisibility(View.INVISIBLE);
+            }
         }
     }
 

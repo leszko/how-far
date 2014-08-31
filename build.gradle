@@ -3,7 +3,7 @@ buildscript {
         maven { url 'http://repo1.maven.org/maven2' }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:0.9.+'
+        classpath 'com.android.tools.build:gradle:0.12.2'
     }
 }
 
@@ -14,14 +14,14 @@ repositories {
 }
 
 dependencies {
-    compile 'com.android.support:appcompat-v7:+'
+    compile 'com.android.support:appcompat-v7:19.1.0'
     compile 'com.google.android.gms:play-services:4.4.52'
     compile 'org.slf4j:slf4j-android:1.6.1-RC1'
 }
 
 android {
     compileSdkVersion 19
-    buildToolsVersion "19.0.0"
+    buildToolsVersion '20.0.0'
 
     defaultConfig {
         minSdkVersion 10
@@ -29,7 +29,6 @@ android {
     }
 
     buildTypes {
-
         signingConfigs {
             releaseConfig {
                 storeFile file(releaseStoreFile)
@@ -38,11 +37,13 @@ android {
                 keyPassword releaseKeyPassword
             }
         }
-
         release {
             runProguard true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.txt'
             signingConfig signingConfigs.releaseConfig
+        }
+        debug {
+            debuggable true
         }
     }
 }

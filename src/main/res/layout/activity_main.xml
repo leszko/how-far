@@ -44,6 +44,12 @@
             android:textSize="@dimen/set_home_button"
             android:paddingLeft="@dimen/set_home_button_padding_horizontal"
             android:paddingRight="@dimen/set_home_button_padding_horizontal" />
+        <com.summercoding.howfar.view.Arrow
+            android:id="@+id/homeDirectionArrow"
+            android:visibility="invisible"
+            android:background="#ccc"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
     </RelativeLayout>
 
 </LinearLayout>
