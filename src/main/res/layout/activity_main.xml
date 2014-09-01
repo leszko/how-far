@@ -47,7 +47,7 @@
         <com.summercoding.howfar.view.Arrow
             android:id="@+id/homeDirectionArrow"
             android:visibility="invisible"
-            android:background="#ccc"
+            android:background="@color/teal"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
     </RelativeLayout>

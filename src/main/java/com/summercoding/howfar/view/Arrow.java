@@ -45,14 +45,14 @@ public class Arrow extends View {
 
         Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
 
-        paint.setColor(Color.RED);
+        paint.setColor(Color.LTGRAY);
         paint.setStyle(Paint.Style.FILL_AND_STROKE);
         paint.setAntiAlias(true);
         paint.setStrokeWidth(2);
 
         Point a = new Point(contentWidth/2, 1);
         Point b = new Point(contentWidth/2 - 100, contentHeight-40);
-        Point c = new Point(contentWidth/2, contentHeight-80);
+        Point c = new Point(contentWidth/2, contentHeight-120);
         Point d = new Point(contentWidth/2 + 100, contentHeight-40);
 
         Path path = new Path();
