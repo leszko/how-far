@@ -1,0 +1,28 @@
+apply plugin: 'java'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    def androidModule = getRootProject()
+    compile androidModule
+
+    def debugVariant = androidModule.android.applicationVariants.findAll({variant ->
+        'debug' == variant.name
+    }).toList().first()
+
+    testCompile debugVariant.javaCompile.classpath
+    testCompile debugVariant.javaCompile.outputs.files
+    testCompile files(androidModule.plugins.findPlugin("com.android.application").getBootClasspath())
+
+    testCompile 'junit:junit:4.11'
+    testCompile 'org.robolectric:robolectric:2.2'
+}
+
+tasks.withType(Test) {
+    scanForTestClasses = false
+    include "**/*Should.class"
+    include "**/*Test.class"
+    include "**/*Tests.class"
+}
