@@ -45,15 +45,20 @@ public class Arrow extends View {
 
         Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
 
-        paint.setColor(Color.LTGRAY);
+        paint.setColor(Color.WHITE);
         paint.setStyle(Paint.Style.FILL_AND_STROKE);
         paint.setAntiAlias(true);
         paint.setStrokeWidth(2);
 
-        Point a = new Point(contentWidth/2, 1);
-        Point b = new Point(contentWidth/2 - 100, contentHeight-40);
-        Point c = new Point(contentWidth/2, contentHeight-120);
-        Point d = new Point(contentWidth/2 + 100, contentHeight-40);
+        int size = Math.min(contentHeight, contentWidth);
+        int arrowLen = size - size/5;
+        int arrowWidth = size / 4;
+        int holeSize = size / 6;
+
+        Point a = new Point(contentWidth/2, contentHeight/2 - arrowLen/2);
+        Point b = new Point(contentWidth/2 - arrowWidth, contentHeight/2 + arrowLen/2);
+        Point c = new Point(contentWidth/2, contentHeight/2 + arrowLen/2 - holeSize);
+        Point d = new Point(contentWidth/2 + arrowWidth, contentHeight/2 + arrowLen/2);
 
         Path path = new Path();
         path.setFillType(Path.FillType.EVEN_ODD);
@@ -63,7 +68,7 @@ public class Arrow extends View {
         path.lineTo(d.x, d.y);
         path.lineTo(a.x, a.y);
 
-        canvas.rotate(rotation, contentWidth/2, (contentHeight-40) / 2);
+        canvas.rotate(rotation, contentWidth/2, contentHeight/2);
         canvas.drawPath(path, paint);
     }
 }

@@ -14,7 +14,7 @@ public class HomeDirectionUpdater implements LocationListener, DirectionListener
 
     private final Arrow homeDirectionArrow;
     private final HomeDistanceCalculator distanceCalculator;
-    private final AverageQueue rotation = new AverageQueue(30);
+    private final AverageQueue rotation = new AverageQueue(60);
     private float azimuth;
     private float bearing;
 
