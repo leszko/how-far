@@ -152,6 +152,7 @@ public class MainActivity extends FragmentActivity {
         distanceCalculator.setHome(location);
         mainTextUpdater.onLocationChanged(location);
         updateSetHomeButtonVisibility();
+        updateSetArrowVisibility();
     }
 
     private boolean hasLocation() {
@@ -166,10 +167,10 @@ public class MainActivity extends FragmentActivity {
     }
 
     private void removeButtonLayout() {
-        LinearLayout mainLayout = (LinearLayout) findViewById(R.id.mainLayout);
+        RelativeLayout buttonLayout = (RelativeLayout) findViewById(R.id.buttonLayout);
         Button setHomeButton = (Button) findViewById(R.id.setHomeButton);
-        if (mainLayout != null && setHomeButton != null) {
-            mainLayout.removeView(setHomeButton);
+        if (buttonLayout != null && setHomeButton != null) {
+            buttonLayout.removeView(setHomeButton);
         }
     }
 
