@@ -1,20 +1,18 @@
 package com.summercoding.howfar.utils;
 
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Queue;
 
-/**
- * Created by piotrek on 9/1/14.
- */
+
 public class AverageQueue {
 
-    private int size;
+    private final int capacity;
     private Queue<Float> values = new LinkedList<Float>();
     private float sum;
 
-    public AverageQueue(int size) {
-        this.size = size;
+    public AverageQueue(int capacity) {
+        Preconditions.greatherThanZero(capacity);
+        this.capacity = capacity;
         this.sum = 0.0f;
     }
 
@@ -25,8 +23,11 @@ public class AverageQueue {
     public void addValue(float v) {
         values.offer(v);
         sum += v;
+        adjustToCapacity();
+    }
 
-        if (values.size() > size) {
+    private void adjustToCapacity() {
+        if (values.size() > capacity) {
             sum -= values.poll();
         }
     }

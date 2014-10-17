@@ -6,9 +6,7 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.util.Log;
 
-/**
- * Created by piotrek on 8/26/14.
- */
+
 public class OrientationReceiver implements SensorEventListener {
 
     private final SensorManager sensorManager;

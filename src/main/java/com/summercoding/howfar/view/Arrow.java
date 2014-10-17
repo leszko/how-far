@@ -13,9 +13,6 @@ import android.util.AttributeSet;
 import android.view.View;
 import com.summercoding.howfar.R;
 
-/**
- * TODO: document your custom view class.
- */
 public class Arrow extends View {
 
     private float rotation = 0f;
