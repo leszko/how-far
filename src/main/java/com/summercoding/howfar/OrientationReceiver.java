@@ -6,6 +6,8 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.util.Log;
 
+import java.util.List;
+
 
 public class OrientationReceiver implements SensorEventListener {
 
@@ -30,12 +32,14 @@ public class OrientationReceiver implements SensorEventListener {
     }
 
     public void start() {
-        sensorManager.registerListener(this,
-                sensorAccelerometer,
-                SENSOR_RATE);
-        sensorManager.registerListener(this,
-                sensorMagneticField,
-                SENSOR_RATE);
+        if (hasOrientationCapabilities()) {
+            sensorManager.registerListener(this,
+                    sensorAccelerometer,
+                    SENSOR_RATE);
+            sensorManager.registerListener(this,
+                    sensorMagneticField,
+                    SENSOR_RATE);
+        }
     }
 
     public void stop() {
@@ -43,6 +47,13 @@ public class OrientationReceiver implements SensorEventListener {
                 sensorAccelerometer);
         sensorManager.unregisterListener(this,
                 sensorMagneticField);
+    }
+
+    public boolean hasOrientationCapabilities() {
+        List<Sensor> accelerometers = sensorManager.getSensorList(Sensor.TYPE_ACCELEROMETER);
+        List<Sensor> magneticFieldSensors = sensorManager.getSensorList(Sensor.TYPE_MAGNETIC_FIELD);
+
+        return !(accelerometers.isEmpty() || magneticFieldSensors.isEmpty());
     }
 
     @Override
@@ -65,7 +76,7 @@ public class OrientationReceiver implements SensorEventListener {
             double azimuth = Math.toDegrees(matrixValues[0]);
             notifyListeners(azimuth);
         } else {
-            Log.i(((Object)this).getClass().getName(),"Fetching orientation failed");
+            Log.d(((Object)this).getClass().getName(),"Fetching orientation failed");
         }
     }
 
