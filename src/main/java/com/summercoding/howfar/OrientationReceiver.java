@@ -76,7 +76,7 @@ public class OrientationReceiver implements SensorEventListener {
             double azimuth = Math.toDegrees(matrixValues[0]);
             notifyListeners(azimuth);
         } else {
-            Log.d(((Object)this).getClass().getName(),"Fetching orientation failed");
+            Log.d(((Object) this).getClass().getName(), "Fetching orientation failed");
         }
     }
 

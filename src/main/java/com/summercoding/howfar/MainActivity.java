@@ -2,7 +2,6 @@ package com.summercoding.howfar;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.hardware.SensorManager;
 import android.location.Location;
 import android.location.LocationManager;
@@ -104,7 +103,7 @@ public class MainActivity extends FragmentActivity {
 
         orientationReceiver = new OrientationReceiver((SensorManager) getSystemService(Context.SENSOR_SERVICE));
         homeDirectionUpdater = new HomeDirectionUpdater(
-                (Arrow)findViewById(R.id.homeDirectionArrow),
+                (Arrow) findViewById(R.id.homeDirectionArrow),
                 distanceCalculator
         );
 
@@ -208,8 +207,8 @@ public class MainActivity extends FragmentActivity {
     }
 
     private void removeHomeButtonLayout() {
-        LinearLayout mainLayout = (LinearLayout)findViewById(R.id.mainLayout);
-        RelativeLayout setHomeButtonLayout = (RelativeLayout)findViewById(R.id.buttonLayout);
+        LinearLayout mainLayout = (LinearLayout) findViewById(R.id.mainLayout);
+        RelativeLayout setHomeButtonLayout = (RelativeLayout) findViewById(R.id.buttonLayout);
         if (mainLayout != null && setHomeButtonLayout != null) {
             mainLayout.removeView(setHomeButtonLayout);
         }
