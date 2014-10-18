@@ -12,6 +12,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -21,6 +22,8 @@ import com.summercoding.howfar.record.RecordLocationListener;
 import com.summercoding.howfar.thirdparty.Eula;
 import com.summercoding.howfar.view.Arrow;
 
+
+// TODO split this into SetHomeActivity and WhereIsHomeActivity or HowFarActivity
 public class MainActivity extends FragmentActivity {
     private static final String PREFS_NAME = "HowFarPrefs";
 
@@ -31,6 +34,8 @@ public class MainActivity extends FragmentActivity {
     private LocationReceiver locationReceiver;
     private OrientationReceiver orientationReceiver;
     private Persister persister;
+
+    // TODO I think this is unnecessary - it should be done in Activity
     private MainTextUpdater mainTextUpdater;
     private CurrentLocationProvider currentLocationProvider;
     private HomeDirectionUpdater homeDirectionUpdater;
@@ -60,6 +65,7 @@ public class MainActivity extends FragmentActivity {
         updateSetHomeButtonVisibility();
         updateSetArrowVisibility();
 
+        // TODO it should be move to onResume - we don't need location while in background
         locationReceiver.start();
     }
 
@@ -97,7 +103,7 @@ public class MainActivity extends FragmentActivity {
 
         orientationReceiver = new OrientationReceiver((SensorManager) getSystemService(Context.SENSOR_SERVICE));
         homeDirectionUpdater = new HomeDirectionUpdater(
-                (Arrow)findViewById(R.id.homeDirectionArrow),
+                (Arrow) findViewById(R.id.homeDirectionArrow),
                 distanceCalculator
         );
 
@@ -137,6 +143,7 @@ public class MainActivity extends FragmentActivity {
     }
 
     private void setHome() {
+        // TODO We don't need to subscribe for location events to obtain that We can use LocationManager.getLastKnownLocation and check how old is it
         Location currentLocation = currentLocationProvider.getCurrentLocation();
         if (currentLocation != null) {
             setHome(currentLocation);
@@ -146,6 +153,8 @@ public class MainActivity extends FragmentActivity {
         }
     }
 
+
+    // TODO I really don't like having two methods with the same name - setHome
     private void setHome(Location location) {
         persister.storeLocation(location);
         distanceCalculator.setHome(location);
@@ -175,12 +184,33 @@ public class MainActivity extends FragmentActivity {
 
     private void updateSetArrowVisibility() {
         Arrow homeDirectionArrow = (Arrow) findViewById(R.id.homeDirectionArrow);
-        if (homeDirectionArrow != null) {
+        if (homeDirectionArrow != null && orientationReceiver.hasOrientationCapabilities()) {
             if (hasLocation()) {
                 homeDirectionArrow.setVisibility(View.VISIBLE);
             } else {
                 homeDirectionArrow.setVisibility(View.INVISIBLE);
             }
+        } else {
+            removeArrow();
+        }
+    }
+
+    private void removeArrow() {
+        Arrow homeDirectionArrow = (Arrow) findViewById(R.id.homeDirectionArrow);
+        RelativeLayout arrowLayout = (RelativeLayout) findViewById(R.id.buttonLayout);
+        if (homeDirectionArrow != null && arrowLayout != null) {
+            arrowLayout.removeView(homeDirectionArrow);
+            if (arrowLayout.getChildCount() == 0) {
+                removeHomeButtonLayout();
+            }
+        }
+    }
+
+    private void removeHomeButtonLayout() {
+        LinearLayout mainLayout = (LinearLayout) findViewById(R.id.mainLayout);
+        RelativeLayout setHomeButtonLayout = (RelativeLayout) findViewById(R.id.buttonLayout);
+        if (mainLayout != null && setHomeButtonLayout != null) {
+            mainLayout.removeView(setHomeButtonLayout);
         }
     }
 
