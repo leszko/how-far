@@ -1,17 +1,13 @@
 package com.summercoding.howfar.view;
 
 import android.content.Context;
-import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Point;
-import android.graphics.drawable.Drawable;
-import android.text.TextPaint;
 import android.util.AttributeSet;
 import android.view.View;
-import com.summercoding.howfar.R;
 
 public class Arrow extends View {
 
@@ -48,14 +44,14 @@ public class Arrow extends View {
         paint.setStrokeWidth(2);
 
         int size = Math.min(contentHeight, contentWidth);
-        int arrowLength = size - size/4;
+        int arrowLength = size - size / 4;
         int arrowWidth = size / 6;
-        int holeSize = size / 5 ;
+        int holeSize = size / 5;
 
-        Point a = new Point(contentWidth/2, contentHeight/2 - arrowLength/2);
-        Point b = new Point(contentWidth/2 - arrowWidth, contentHeight/2 + arrowLength/2);
-        Point c = new Point(contentWidth/2, contentHeight/2 + arrowLength/2 - holeSize);
-        Point d = new Point(contentWidth/2 + arrowWidth, contentHeight/2 + arrowLength/2);
+        Point a = new Point(contentWidth / 2, contentHeight / 2 - arrowLength / 2);
+        Point b = new Point(contentWidth / 2 - arrowWidth, contentHeight / 2 + arrowLength / 2);
+        Point c = new Point(contentWidth / 2, contentHeight / 2 + arrowLength / 2 - holeSize);
+        Point d = new Point(contentWidth / 2 + arrowWidth, contentHeight / 2 + arrowLength / 2);
 
         Path path = new Path();
         path.setFillType(Path.FillType.EVEN_ODD);
@@ -65,7 +61,7 @@ public class Arrow extends View {
         path.lineTo(d.x, d.y);
         path.lineTo(a.x, a.y);
 
-        canvas.rotate(rotation, contentWidth/2, contentHeight/2);
+        canvas.rotate(rotation, contentWidth / 2, contentHeight / 2);
         canvas.drawPath(path, paint);
     }
 }
