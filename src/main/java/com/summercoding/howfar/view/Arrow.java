@@ -48,14 +48,14 @@ public class Arrow extends View {
         paint.setStrokeWidth(2);
 
         int size = Math.min(contentHeight, contentWidth);
-        int arrowLen = size - size/5;
-        int arrowWidth = size / 4;
-        int holeSize = size / 6;
+        int arrowLength = size - size/4;
+        int arrowWidth = size / 6;
+        int holeSize = size / 5 ;
 
-        Point a = new Point(contentWidth/2, contentHeight/2 - arrowLen/2);
-        Point b = new Point(contentWidth/2 - arrowWidth, contentHeight/2 + arrowLen/2);
-        Point c = new Point(contentWidth/2, contentHeight/2 + arrowLen/2 - holeSize);
-        Point d = new Point(contentWidth/2 + arrowWidth, contentHeight/2 + arrowLen/2);
+        Point a = new Point(contentWidth/2, contentHeight/2 - arrowLength/2);
+        Point b = new Point(contentWidth/2 - arrowWidth, contentHeight/2 + arrowLength/2);
+        Point c = new Point(contentWidth/2, contentHeight/2 + arrowLength/2 - holeSize);
+        Point d = new Point(contentWidth/2 + arrowWidth, contentHeight/2 + arrowLength/2);
 
         Path path = new Path();
         path.setFillType(Path.FillType.EVEN_ODD);
