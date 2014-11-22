@@ -1,6 +1,8 @@
 package com.summercoding.howfar;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.hardware.SensorManager;
 import android.location.Location;
@@ -28,7 +30,9 @@ public class MainActivity extends FragmentActivity {
     private static final String PREFS_NAME = "HowFarPrefs";
 
     public static final String HOME_SET_MESSAGE = "Home is set";
-    public static final String HOME_NOT_SET_MESSAGE = "Current location not found";
+    public static final String HOME_LOCATION_NOT_FOUND = "Current location not found";
+    public static final String HOME_NOT_SET_MESSAGE = "Home not set";
+    public static final String SET_HOME_CONFIRMATION_MESSAGE = "Do you want to set a new home?";
 
     private final HomeDistanceCalculator distanceCalculator = new HomeDistanceCalculator();
     private LocationReceiver locationReceiver;
@@ -38,7 +42,6 @@ public class MainActivity extends FragmentActivity {
     // TODO I think this is unnecessary - it should be done in Activity
     private MainTextUpdater mainTextUpdater;
     private CurrentLocationProvider currentLocationProvider;
-    private HomeDirectionUpdater homeDirectionUpdater;
 
     @Override
     protected void onSaveInstanceState(Bundle SavedInstanceState) {
@@ -102,7 +105,7 @@ public class MainActivity extends FragmentActivity {
         ((HowFarApplication) getApplication()).setLocationReceiver(locationReceiver);
 
         orientationReceiver = new OrientationReceiver((SensorManager) getSystemService(Context.SENSOR_SERVICE));
-        homeDirectionUpdater = new HomeDirectionUpdater(
+        HomeDirectionUpdater homeDirectionUpdater = new HomeDirectionUpdater(
                 (Arrow) findViewById(R.id.homeDirectionArrow),
                 distanceCalculator
         );
@@ -128,7 +131,7 @@ public class MainActivity extends FragmentActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_set_home:
-                setHome();
+                tryToSetHome();
                 return true;
             case R.id.action_record:
                 onRecordActionClicked();
@@ -139,28 +142,54 @@ public class MainActivity extends FragmentActivity {
     }
 
     public void onSetHomeButtonClicked(View view) {
-        setHome();
+        tryToSetHome();
     }
 
-    private void setHome() {
+    private void tryToSetHome() {
         // TODO We don't need to subscribe for location events to obtain that We can use LocationManager.getLastKnownLocation and check how old is it
         Location currentLocation = currentLocationProvider.getCurrentLocation();
         if (currentLocation != null) {
-            setHome(currentLocation);
-            showToast(HOME_SET_MESSAGE);
+            if (persister.loadLocation() == null) {
+                setHome(currentLocation);
+            } else {
+                setHomeWithConfirmationDialog(currentLocation);
+            }
         } else {
-            showToast(HOME_NOT_SET_MESSAGE);
+            showToast(HOME_LOCATION_NOT_FOUND);
         }
     }
 
+    private void setHomeWithConfirmationDialog(final Location currentLocation) {
+        DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which) {
+                    case DialogInterface.BUTTON_POSITIVE:
+                        // Yes button clicked
+                        setHome(currentLocation);
+                        break;
+                    case DialogInterface.BUTTON_NEGATIVE:
+                        // No button clicked
+                        showToast(HOME_NOT_SET_MESSAGE);
+                        break;
+                }
+            }
+        };
 
-    // TODO I really don't like having two methods with the same name - setHome
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(SET_HOME_CONFIRMATION_MESSAGE).setPositiveButton("Yes", dialogClickListener)
+                .setNegativeButton("No", dialogClickListener).show();
+    }
+
+    // TODO I really don't like having two methods with the same name - tryToSetHome
     private void setHome(Location location) {
         persister.storeLocation(location);
         distanceCalculator.setHome(location);
         mainTextUpdater.onLocationChanged(location);
         updateSetHomeButtonVisibility();
         updateSetArrowVisibility();
+
+        showToast(HOME_SET_MESSAGE);
     }
 
     private boolean hasLocation() {
