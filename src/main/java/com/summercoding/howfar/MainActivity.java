@@ -21,7 +21,6 @@ import android.widget.Toast;
 
 import com.summercoding.howfar.record.RecordActivity;
 import com.summercoding.howfar.record.RecordLocationListener;
-import com.summercoding.howfar.thirdparty.Eula;
 import com.summercoding.howfar.view.Arrow;
 
 
@@ -62,7 +61,6 @@ public class MainActivity extends FragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Eula.show(this);
 
         init();
         updateSetHomeButtonVisibility();
