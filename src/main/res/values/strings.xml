@@ -5,9 +5,6 @@
     <string name="action_set_home">Set home</string>
     <string name="action_record">Record</string>
     <string name="main_text_default">Where is your home?</string>
-    <string name="eula_title">End User License Agreement</string>
-    <string name="eula_accept">OK</string>
-    <string name="eula_refuse">Cancel</string>
     <string name="record_text_default">No entries yet!</string>
 
 </resources>
